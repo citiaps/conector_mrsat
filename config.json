@@ -9,5 +9,10 @@
 	    "passwd": "citiaps1234",
 	    "user": "citiaps"
     },
+    "webservice": {
+        "url": "http://www.marearoja.cl/WSMRSAT/aws_mrsnp.aspx?wsdl",
+        "user": "UsuWSMrsat",
+        "passwd": "PassWSMrsat"
+    },
     "log_path" : "./log"
 }
