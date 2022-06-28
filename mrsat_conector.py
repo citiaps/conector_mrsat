@@ -66,7 +66,7 @@ def open_sql_query(sql_file, logger):
     """
 
     with open("./sql_queries/" + sql_file, encoding = "utf8") as file:
-        sql_query = text(file.read())
+        sql_query = text(file.read().format("entradas", "gestio_sp"))
     print("[OK] - " + sql_file + " SQL file successfully opened")
     logger.debug("[OK] - " + sql_file.upper() + " OPEN_SQL_QUERY")
     return sql_query
@@ -84,7 +84,7 @@ def create_db_engine(db_connection, logger):
 
     db_engine = create_engine(db_connection)
     print("[OK] - SQLAlchemy engine succesfully generated")
-    logger.debug("[OK] - CREATE_db_ENGINE")
+    logger.debug("[OK] - CREATE_DB_ENGINE")
     return db_engine
 
 def create_db_connection(config_data, logger):
@@ -97,12 +97,13 @@ def create_db_connection(config_data, logger):
         str
     """
 
-    db_connection = 'postgresql://{}:{}@{}:{}/{}'.format(
-        config_data['mapstore']['user'],
-        config_data['mapstore']['passwd'], 
-        config_data['mapstore']['host'], 
-        config_data['mapstore']['port'], 
-        config_data['mapstore']['db'])
+    db_connection = '{}://{}:{}@{}:{}/{}'.format(
+        config_data['sernapesca']['db_type'],
+        config_data['sernapesca']['user'],
+        config_data['sernapesca']['passwd'], 
+        config_data['sernapesca']['host'], 
+        config_data['sernapesca']['port'], 
+        config_data['sernapesca']['db'])
     print("[OK] - Connection string successfully generated")
     logger.debug("[OK] - CREATE_DB_CONNECTION")
     return db_connection   
