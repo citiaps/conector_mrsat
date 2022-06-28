@@ -1,0 +1,13 @@
+{
+    "sernapesca": {
+        "db_type": "postgresql",
+        "db": "yoinformo_gis",
+        "schema": "entradas",
+        "table": "gestio_sp",
+	    "host": "138.197.13.37",
+	    "port": "5432",
+	    "passwd": "citiaps1234",
+	    "user": "citiaps"
+    },
+    "log_path" : "./log"
+}
