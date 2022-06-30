@@ -21,15 +21,20 @@ def append_new_records(df, config_data, db_engine, logger):
     Raises:
         SAWarning: Did not recognize type 'geometry' of column 'geom'
     """
+    try:
+        df.to_sql(config_data['sernapesca']['table'], 
+                    db_engine, 
+                    if_exists = 'append', 
+                    schema = config_data['sernapesca']['schema'], 
+                    index = False)
 
-    df.to_sql(config_data['sernapesca']['table'], 
-                db_engine, 
-                if_exists = 'append', 
-                schema = config_data['sernapesca']['schema'], 
-                index = False)
+        print("[OK] - new records successfully appended to " + config_data['sernapesca']['table'] + " table")
+        logger.debug("[OK] - APPEND_NEW_RECORDS")
 
-    print("[OK] - new records successfully appended to " + config_data['sernapesca']['table'] + " table")
-    logger.debug("[OK] - APPEND_NEW_RECORDS")
+    except Exception as e:
+        print("[ERROR] - Appending the new records to the existing table")
+        logger.error('[ERROR] - APPEND_NEW_RECORDS')
+        sys.exit(2)
 
 
 def delete_old_records(db_engine, sql_query, logger):
@@ -71,11 +76,16 @@ def create_db_engine(db_connection, logger):
     Returns:
         sqlalchemy.engine.base.Engine
     """
-
-    db_engine = create_engine(db_connection)
-    print("[OK] - SQLAlchemy engine succesfully generated")
-    logger.debug("[OK] - CREATE_DB_ENGINE")
-    return db_engine
+    try:
+        db_engine = create_engine(db_connection)
+        print("[OK] - SQLAlchemy engine succesfully generated")
+        logger.debug("[OK] - CREATE_DB_ENGINE")
+        return db_engine
+    
+    except Exception as e:
+        print("[ERROR] - Creating the database connection engine")
+        logger.error('[ERROR] - CREATE_DB_ENGINE')
+        sys.exit(2)
 
 def create_db_connection(config_data, logger):
     """Creates the database connection string based on the config file parameters.
@@ -86,7 +96,6 @@ def create_db_connection(config_data, logger):
     Returns:
         str
     """
-
     db_connection = '{}://{}:{}@{}:{}/{}'.format(
         config_data['sernapesca']['db_type'],
         config_data['sernapesca']['user'],
@@ -96,7 +105,9 @@ def create_db_connection(config_data, logger):
         config_data['sernapesca']['db'])
     print("[OK] - Connection string successfully generated")
     logger.debug("[OK] - CREATE_DB_CONNECTION")
-    return db_connection   
+    return db_connection
+    
+
 
 def dict_to_df(response_dict, logger):
     """Transforms the Python dict to a pandas DataFrame.
