@@ -84,6 +84,7 @@ def create_db_engine(db_connection, logger):
     
     except Exception as e:
         print("[ERROR] - Creating the database connection engine")
+        print(e)
         logger.error('[ERROR] - CREATE_DB_ENGINE')
         sys.exit(2)
 
