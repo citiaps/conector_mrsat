@@ -6,11 +6,11 @@ import pandas as pd
 from zeep import Client, Settings, helpers
 from zeep.transports import Transport
 from requests import Session
-from requests.auth import HTTPBasicAuth
+from sqlalchemy import inspect
 from sqlalchemy import create_engine, text
 from datetime import date, datetime
 
-def append_new_records(df, config_data, db_engine, logger):
+def append_new_records(df, config_data, db_engine, n_days, logger):
     """Append the records from the past 3 days to the database table with toxicologic data.
 
     Args:
@@ -22,13 +22,20 @@ def append_new_records(df, config_data, db_engine, logger):
         SAWarning: Did not recognize type 'geometry' of column 'geom'
     """
     try:
-        df.to_sql(config_data['sernapesca']['table'], 
+        df.to_sql(config_data['sernapesca']['last_days_table'], 
                     db_engine, 
                     if_exists = 'append', 
                     schema = config_data['sernapesca']['schema'], 
                     index = False)
 
-        print("[OK] - new records successfully appended to " + config_data['sernapesca']['table'] + " table")
+        # Case if the table previously exists
+        if n_days == 2:
+            print("[OK] - new records successfully appended to " + config_data['sernapesca']['last_days_table'] + " table")
+        
+        # Case if the table doesn't exists
+        else:
+            print("[OK] - " + config_data['sernapesca']['last_days_table'] + " table successfully created")
+        
         logger.debug("[OK] - APPEND_NEW_RECORDS")
 
     except Exception as e:
@@ -66,50 +73,6 @@ def open_sql_query(sql_file, logger):
     logger.debug("[OK] - " + sql_file.upper() + " OPEN_SQL_QUERY")
     return sql_query
 
-
-def create_db_engine(db_connection, logger):
-    """Creates a sqlalchemy database engine based on the database connection string.
-
-    Args:
-        db_connection (str): string with the databse connection.
-
-    Returns:
-        sqlalchemy.engine.base.Engine
-    """
-    try:
-        db_engine = create_engine(db_connection)
-        print("[OK] - SQLAlchemy engine succesfully generated")
-        logger.debug("[OK] - CREATE_DB_ENGINE")
-        return db_engine
-    
-    except Exception as e:
-        print("[ERROR] - Creating the database connection engine")
-        print(e)
-        logger.error('[ERROR] - CREATE_DB_ENGINE')
-        sys.exit(2)
-
-def create_db_connection(config_data, logger):
-    """Creates the database connection string based on the config file parameters.
-
-    Args:
-        config_data (dict): config.json parameters.
-
-    Returns:
-        str
-    """
-    db_connection = '{}://{}:{}@{}:{}/{}'.format(
-        config_data['sernapesca']['db_type'],
-        config_data['sernapesca']['user'],
-        config_data['sernapesca']['passwd'], 
-        config_data['sernapesca']['host'], 
-        config_data['sernapesca']['port'], 
-        config_data['sernapesca']['db'])
-    print("[OK] - Connection string successfully generated")
-    logger.debug("[OK] - CREATE_DB_CONNECTION")
-    return db_connection
-    
-
-
 def dict_to_df(response_dict, logger):
     """Transforms the Python dict to a pandas DataFrame.
 
@@ -138,11 +101,12 @@ def response_to_dict(ws_response, logger):
     logger.debug("[OK] - RESPONSE_TO_DICT")
     return response_dict
 
-def get_ws_response(config_data, client, logger):
+def get_ws_response(config_data, client, n_days, logger):
     """Gets the past 60 days toxicologic records from the mrSAT WebService as a zeep response object.
 
     Args:
         config_data (dict): config.json parameters.
+        n_days: Number of days to query based on the existence of the table.
         client (zeep.client.Client): zeep Client object.
 
     Returns:
@@ -151,10 +115,30 @@ def get_ws_response(config_data, client, logger):
     ws_reponse = client.service.Execute(Usuario = config_data['webservice']['user'], 
                                         Password = config_data['webservice']['passwd'],
                                         Fechaconsulta = str(date.today()),
-                                        Numerodias = 2)
-    print("[OK] - Web Service response successfully gotten")
+                                        Numerodias = n_days)
+    print("[OK] - Web Service response successfully gotten. " + str(n_days + 1) + " days queried.")
     logger.debug("[OK] - GET_WS_RESPONSE")
     return ws_reponse
+
+def check_if_table_exists(db_engine, config_data, logger):
+    """Check if the recent records table exists on the database. This determines the number of days to query to the WS. 
+
+    Args:
+        db_engine (sqlalchemy.engine.base.Engine): Database sqlalchemy engine.
+        config_data (dict): config.json parameters.
+
+    Returns:
+        int
+    """
+    if inspect(db_engine).has_table(config_data['sernapesca']['last_days_table'], config_data['sernapesca']['schema']):
+        n_days = 2
+
+    else:
+        n_days = 59
+
+    print("[OK] - Recent records table successfully checked")
+    logger.debug("[OK] - CHECK_IF_TABLE_EXISTS")
+    return n_days
 
 def make_client(ws_url, session, settings, logger):
     """Generate the WebService client, based on the WS URL and the session and settings parameters.
@@ -218,6 +202,52 @@ def generate_ws_url_string(config_data, logger):
     print("[OK] - WebService URL string successfully generated")
     logger.debug("[OK] - GENERATE_WS_URL_STRING")
     return ws_url
+
+def create_db_engine(db_connection, logger):
+    """Creates a sqlalchemy database engine based on the database connection string.
+
+    Args:
+        db_connection (str): string with the databse connection.
+
+    Returns:
+        sqlalchemy.engine.base.Engine
+    """
+    try:
+        db_engine = create_engine(db_connection)
+        print("[OK] - SQLAlchemy engine succesfully generated")
+        logger.debug("[OK] - CREATE_DB_ENGINE")
+        return db_engine
+    
+    except Exception as e:
+        print("[ERROR] - Creating the database connection engine")
+        print(e)
+        logger.error('[ERROR] - CREATE_DB_ENGINE')
+        sys.exit(2)
+
+def create_db_connection(config_data, logger):
+    """Creates the database connection string based on the config file parameters.
+
+    Args:
+        config_data (dict): config.json parameters.
+
+    Returns:
+        str
+    """
+    db_connection = '{}://{}:{}@{}:{}/{}'.format(
+        config_data['sernapesca']['db_type'],
+        config_data['sernapesca']['user'],
+        config_data['sernapesca']['passwd'], 
+        config_data['sernapesca']['host'], 
+        config_data['sernapesca']['port'], 
+        config_data['sernapesca']['db'])
+
+    # Case if the DB is SQL Server
+    if config_data['sernapesca']['db'] == 'mssql+pyodbc':
+        db_connection = db_connection + '?driver=SQL Server'
+
+    print("[OK] - Connection string successfully generated")
+    logger.debug("[OK] - CREATE_DB_CONNECTION")
+    return db_connection
 
 def create_logger(log_file):
     """Creates a logger based on the passed log file.
@@ -301,6 +331,12 @@ def main(argv):
     # Create the logger
     logger = create_logger(log_file)
 
+    # Create string with the given database parameters
+    db_connection = create_db_connection(config_data, logger)
+
+    # Create sqlalchemy engine based on database parameters
+    db_engine = create_db_engine(db_connection, logger)
+    
     # Get the web service URL
     ws_url = generate_ws_url_string(config_data, logger)
 
@@ -316,8 +352,11 @@ def main(argv):
     # Make the webservice's consumer client
     client = make_client(ws_url, session, settings, logger)
 
+    # Set the number of days to query based on the existence of the recent records table
+    n_days = check_if_table_exists(db_engine, config_data, logger)
+
     # Get the WebService response
-    ws_response = get_ws_response(config_data, client, logger)
+    ws_response = get_ws_response(config_data, client, n_days, logger)
 
     # Transform the WebService response into a Python dictionary
     response_dict = response_to_dict(ws_response, logger)
@@ -325,24 +364,21 @@ def main(argv):
     # Transform python dict into Pandas DataFrame
     df = dict_to_df(response_dict, logger)
 
-    # Create string with the given database parameters
-    db_connection = create_db_connection(config_data, logger)
+    # Execute the delete_recent_records query if the table previosly exists
+    if n_days == 2:
 
-    # Create sqlalchemy engine based on database parameters
-    db_engine = create_db_engine(db_connection, logger)
+        # Open the "delete_recent_records.sql" file
+        sql_query = open_sql_query("delete_recent_records.sql", logger)
 
-    # Open the "delete_recent_records.sql" file
-    sql_query = open_sql_query("delete_recent_records.sql", logger)
-
-    # Delete the past 3 days records from the database table
-    delete_old_records(db_engine, sql_query, logger)
+        # Delete the past 3 days records from the database table
+        delete_old_records(db_engine, sql_query, logger)
 
     # Append the new records extracted from the WebServiceto the database table
-    append_new_records(df, config_data, db_engine, logger)
+    append_new_records(df, config_data, db_engine, n_days, logger)
 
     end = datetime.now()
 
-    print("[OK] - New records successfully appended to " + config_data['sernapesca']['table'] + f" table. Time elapsed: {end - start}")
+    print(f"[OK] - Script successfully executed. Time elapsed: {end - start}")
 
 if __name__ == "__main__":
     main(sys.argv)
