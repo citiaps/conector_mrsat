@@ -6960,3 +6960,701 @@ isodate.isoerror.ISO8601Error: Unrecognised ISO 8601 date format: ''
 2022-06-30 11:47:20,033 [OK] - DELETE_RECENT_RECORDS.SQL OPEN_SQL_QUERY
 2022-06-30 11:47:22,462 [OK] - DELETE_OLD_RECORDS
 2022-06-30 11:47:23,667 [OK] - APPEND_NEW_RECORDS
+2022-07-04 15:16:07,284 [OK] - GENERATE_WS_URL_STRING
+2022-07-04 15:16:07,285 [OK] - GENERATE_SESSION
+2022-07-04 15:16:07,285 [OK] - SET_USER_AND_PSSWD
+2022-07-04 15:16:07,285 [OK] - SET_SETTINGS
+2022-07-04 15:16:07,285 Init schema document for None
+2022-07-04 15:16:07,286 register_type('{http://www.w3.org/2001/XMLSchema}string', <zeep.xsd.types.builtins.String object at 0x0000025F425FC610>)
+2022-07-04 15:16:07,286 register_type('{http://www.w3.org/2001/XMLSchema}boolean', <zeep.xsd.types.builtins.Boolean object at 0x0000025F425FC6A0>)
+2022-07-04 15:16:07,286 register_type('{http://www.w3.org/2001/XMLSchema}decimal', <zeep.xsd.types.builtins.Decimal object at 0x0000025F425FC730>)
+2022-07-04 15:16:07,286 register_type('{http://www.w3.org/2001/XMLSchema}float', <zeep.xsd.types.builtins.Float object at 0x0000025F425FC7C0>)
+2022-07-04 15:16:07,286 register_type('{http://www.w3.org/2001/XMLSchema}double', <zeep.xsd.types.builtins.Double object at 0x0000025F425FC850>)
+2022-07-04 15:16:07,286 register_type('{http://www.w3.org/2001/XMLSchema}duration', <zeep.xsd.types.builtins.Duration object at 0x0000025F425FC8E0>)
+2022-07-04 15:16:07,286 register_type('{http://www.w3.org/2001/XMLSchema}dateTime', <zeep.xsd.types.builtins.DateTime object at 0x0000025F425FC970>)
+2022-07-04 15:16:07,286 register_type('{http://www.w3.org/2001/XMLSchema}time', <zeep.xsd.types.builtins.Time object at 0x0000025F425FCA00>)
+2022-07-04 15:16:07,287 register_type('{http://www.w3.org/2001/XMLSchema}date', <zeep.xsd.types.builtins.Date object at 0x0000025F425FCA90>)
+2022-07-04 15:16:07,287 register_type('{http://www.w3.org/2001/XMLSchema}gYearMonth', <zeep.xsd.types.builtins.gYearMonth object at 0x0000025F425FCB20>)
+2022-07-04 15:16:07,287 register_type('{http://www.w3.org/2001/XMLSchema}gYear', <zeep.xsd.types.builtins.gYear object at 0x0000025F425FCBB0>)
+2022-07-04 15:16:07,287 register_type('{http://www.w3.org/2001/XMLSchema}gMonthDay', <zeep.xsd.types.builtins.gMonthDay object at 0x0000025F425FCC40>)
+2022-07-04 15:16:07,287 register_type('{http://www.w3.org/2001/XMLSchema}gDay', <zeep.xsd.types.builtins.gDay object at 0x0000025F425FCCD0>)
+2022-07-04 15:16:07,287 register_type('{http://www.w3.org/2001/XMLSchema}gMonth', <zeep.xsd.types.builtins.gMonth object at 0x0000025F425FCD60>)
+2022-07-04 15:16:07,287 register_type('{http://www.w3.org/2001/XMLSchema}hexBinary', <zeep.xsd.types.builtins.HexBinary object at 0x0000025F425FCDF0>)
+2022-07-04 15:16:07,287 register_type('{http://www.w3.org/2001/XMLSchema}base64Binary', <zeep.xsd.types.builtins.Base64Binary object at 0x0000025F425FCE80>)
+2022-07-04 15:16:07,287 register_type('{http://www.w3.org/2001/XMLSchema}anyURI', <zeep.xsd.types.builtins.AnyURI object at 0x0000025F425FCF10>)
+2022-07-04 15:16:07,287 register_type('{http://www.w3.org/2001/XMLSchema}QName', <zeep.xsd.types.builtins.QName object at 0x0000025F425FCFA0>)
+2022-07-04 15:16:07,287 register_type('{http://www.w3.org/2001/XMLSchema}NOTATION', <zeep.xsd.types.builtins.Notation object at 0x0000025F425FD030>)
+2022-07-04 15:16:07,287 register_type('{http://www.w3.org/2001/XMLSchema}normalizedString', <zeep.xsd.types.builtins.NormalizedString object at 0x0000025F425FD0C0>)
+2022-07-04 15:16:07,288 register_type('{http://www.w3.org/2001/XMLSchema}token', <zeep.xsd.types.builtins.Token object at 0x0000025F425FD150>)
+2022-07-04 15:16:07,288 register_type('{http://www.w3.org/2001/XMLSchema}language', <zeep.xsd.types.builtins.Language object at 0x0000025F425FD1E0>)
+2022-07-04 15:16:07,288 register_type('{http://www.w3.org/2001/XMLSchema}NMTOKEN', <zeep.xsd.types.builtins.NmToken object at 0x0000025F425FD270>)
+2022-07-04 15:16:07,288 register_type('{http://www.w3.org/2001/XMLSchema}NMTOKENS', <zeep.xsd.types.builtins.NmTokens object at 0x0000025F425FD300>)
+2022-07-04 15:16:07,288 register_type('{http://www.w3.org/2001/XMLSchema}Name', <zeep.xsd.types.builtins.Name object at 0x0000025F425FD390>)
+2022-07-04 15:16:07,288 register_type('{http://www.w3.org/2001/XMLSchema}NCName', <zeep.xsd.types.builtins.NCName object at 0x0000025F425FD420>)
+2022-07-04 15:16:07,288 register_type('{http://www.w3.org/2001/XMLSchema}ID', <zeep.xsd.types.builtins.ID object at 0x0000025F425FD4B0>)
+2022-07-04 15:16:07,288 register_type('{http://www.w3.org/2001/XMLSchema}IDREF', <zeep.xsd.types.builtins.IDREF object at 0x0000025F425FD540>)
+2022-07-04 15:16:07,288 register_type('{http://www.w3.org/2001/XMLSchema}IDREFS', <zeep.xsd.types.builtins.IDREFS object at 0x0000025F425FD5D0>)
+2022-07-04 15:16:07,288 register_type('{http://www.w3.org/2001/XMLSchema}ENTITY', <zeep.xsd.types.builtins.Entity object at 0x0000025F425FD660>)
+2022-07-04 15:16:07,288 register_type('{http://www.w3.org/2001/XMLSchema}ENTITIES', <zeep.xsd.types.builtins.Entities object at 0x0000025F425FD6F0>)
+2022-07-04 15:16:07,288 register_type('{http://www.w3.org/2001/XMLSchema}integer', <zeep.xsd.types.builtins.Integer object at 0x0000025F425FD780>)
+2022-07-04 15:16:07,289 register_type('{http://www.w3.org/2001/XMLSchema}nonPositiveInteger', <zeep.xsd.types.builtins.NonPositiveInteger object at 0x0000025F425FD810>)
+2022-07-04 15:16:07,289 register_type('{http://www.w3.org/2001/XMLSchema}negativeInteger', <zeep.xsd.types.builtins.NegativeInteger object at 0x0000025F425FD8A0>)
+2022-07-04 15:16:07,289 register_type('{http://www.w3.org/2001/XMLSchema}long', <zeep.xsd.types.builtins.Long object at 0x0000025F425FD930>)
+2022-07-04 15:16:07,289 register_type('{http://www.w3.org/2001/XMLSchema}int', <zeep.xsd.types.builtins.Int object at 0x0000025F425FD9C0>)
+2022-07-04 15:16:07,289 register_type('{http://www.w3.org/2001/XMLSchema}short', <zeep.xsd.types.builtins.Short object at 0x0000025F425FDA50>)
+2022-07-04 15:16:07,289 register_type('{http://www.w3.org/2001/XMLSchema}byte', <zeep.xsd.types.builtins.Byte object at 0x0000025F425FDAE0>)
+2022-07-04 15:16:07,289 register_type('{http://www.w3.org/2001/XMLSchema}nonNegativeInteger', <zeep.xsd.types.builtins.NonNegativeInteger object at 0x0000025F425FDB70>)
+2022-07-04 15:16:07,289 register_type('{http://www.w3.org/2001/XMLSchema}unsignedByte', <zeep.xsd.types.builtins.UnsignedByte object at 0x0000025F425FDC00>)
+2022-07-04 15:16:07,289 register_type('{http://www.w3.org/2001/XMLSchema}unsignedInt', <zeep.xsd.types.builtins.UnsignedInt object at 0x0000025F425FDC90>)
+2022-07-04 15:16:07,289 register_type('{http://www.w3.org/2001/XMLSchema}unsignedLong', <zeep.xsd.types.builtins.UnsignedLong object at 0x0000025F425FDD20>)
+2022-07-04 15:16:07,289 register_type('{http://www.w3.org/2001/XMLSchema}unsignedShort', <zeep.xsd.types.builtins.UnsignedShort object at 0x0000025F425FDDB0>)
+2022-07-04 15:16:07,290 register_type('{http://www.w3.org/2001/XMLSchema}positiveInteger', <zeep.xsd.types.builtins.PositiveInteger object at 0x0000025F425FDE40>)
+2022-07-04 15:16:07,290 register_type('{http://www.w3.org/2001/XMLSchema}anyType', <zeep.xsd.types.any.AnyType object at 0x0000025F425FDED0>)
+2022-07-04 15:16:07,290 register_type('{http://www.w3.org/2001/XMLSchema}anySimpleType', <zeep.xsd.types.simple.AnySimpleType object at 0x0000025F425FDF30>)
+2022-07-04 15:16:07,290 register_element('{http://www.w3.org/2001/XMLSchema}schema', <zeep.xsd.elements.builtins.Schema object at 0x0000025F425FDFC0>)
+2022-07-04 15:16:07,290 Add document with tns http://www.w3.org/2001/XMLSchema to schema 2608158721360
+2022-07-04 15:16:07,290 Loading remote data from: http://www.marearoja.cl/WSMRSAT/aws_mrsnp.aspx?wsdl
+2022-07-04 15:16:07,292 Starting new HTTP connection (1): www.marearoja.cl:80
+2022-07-04 15:16:07,488 http://www.marearoja.cl:80 "GET /WSMRSAT/aws_mrsnp.aspx?wsdl HTTP/1.1" 200 1157
+2022-07-04 15:16:07,492 Creating definition for http://www.marearoja.cl/WSMRSAT/aws_mrsnp.aspx?wsdl
+2022-07-04 15:16:07,493 Init schema document for 'http://www.marearoja.cl/WSMRSAT/aws_mrsnp.aspx?wsdl'
+2022-07-04 15:16:07,494 Add document with tns WEBSERVICE to schema 2608158721360
+2022-07-04 15:16:07,494 register_type('{WEBSERVICE}SDTSNP', <zeep.xsd.dynamic_types.SDTSNP object at 0x0000025F425FE830>)
+2022-07-04 15:16:07,497 register_type('{WEBSERVICE}SDTSNP.SDTSNPItem', <zeep.xsd.dynamic_types.SDTSNP.SDTSNPItem object at 0x0000025F425FC5E0>)
+2022-07-04 15:16:07,498 register_element('{WEBSERVICE}WS_MRSNP.Execute', <Element(name='WS_MRSNP.Execute', type=<zeep.xsd.dynamic_types.WS_MRSNP.Execute object at 0x0000025F42651510>)>)
+2022-07-04 15:16:07,498 register_element('{WEBSERVICE}WS_MRSNP.ExecuteResponse', <Element(name='WS_MRSNP.ExecuteResponse', type=<zeep.xsd.dynamic_types.WS_MRSNP.ExecuteResponse object at 0x0000025F42651A20>)>)
+2022-07-04 15:16:07,498 Resolving in schema <SchemaDocument(location='http://www.marearoja.cl/WSMRSAT/aws_mrsnp.aspx?wsdl', tns='WEBSERVICE', is_empty=False)>
+2022-07-04 15:16:07,499 Adding message: {WEBSERVICE}WS_MRSNP.ExecuteSoapIn
+2022-07-04 15:16:07,499 Adding message: {WEBSERVICE}WS_MRSNP.ExecuteSoapOut
+2022-07-04 15:16:07,499 Adding port: {WEBSERVICE}WS_MRSNPSoapPort
+2022-07-04 15:16:07,757 Adding binding: {WEBSERVICE}WS_MRSNPSoapBinding
+2022-07-04 15:16:07,758 Adding service: WS_MRSNP
+2022-07-04 15:16:07,758 [OK] - MAKE_CLIENT
+2022-07-04 15:16:07,760 HTTP Post to http://www.marearoja.cl/WSMRSAT/aws_mrsnp.aspx:
+<?xml version='1.0' encoding='utf-8'?>
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/"><soap-env:Body><ns0:WS_MRSNP.Execute xmlns:ns0="WEBSERVICE"><ns0:Usuario>UsuWSMrsat</ns0:Usuario><ns0:Password>PassWSMrsat</ns0:Password><ns0:Fechaconsulta>2022-07-04</ns0:Fechaconsulta><ns0:Numerodias>2</ns0:Numerodias></ns0:WS_MRSNP.Execute></soap-env:Body></soap-env:Envelope>
+2022-07-04 15:16:08,100 http://www.marearoja.cl:80 "POST /WSMRSAT/aws_mrsnp.aspx HTTP/1.1" 200 1238
+2022-07-04 15:16:08,102 HTTP Response from http://www.marearoja.cl/WSMRSAT/aws_mrsnp.aspx (status: 200):
+<?xml version = "1.0" encoding = "utf-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<SOAP-ENV:Body>
+		<WS_MRSNP.ExecuteResponse xmlns="WEBSERVICE">
+			<Fechadesde xmlns="WEBSERVICE">2022-07-02</Fechadesde>
+			<Fechahasta xmlns="WEBSERVICE">2022-07-04</Fechahasta>
+			<Totregistros xmlns="WEBSERVICE">10</Totregistros>
+			<Estado xmlns="WEBSERVICE">0</Estado>
+			<Estadoejecucion xmlns="WEBSERVICE">Ejecutado Correctamente</Estadoejecucion>
+			<Sdtsnp xmlns="WEBSERVICE">
+				<SDTSNP.SDTSNPItem xmlns="WEBSERVICE">
+					<Folio>650812</Folio>
+					<CodigoAnalisis>5</CodigoAnalisis>
+					<DescripcionAnalisis>RED CUALITATIVA</DescripcionAnalisis>
+					<Resultado>0.0000</Resultado>
+					<CodigoArea>10228</CodigoArea>
+					<DescripcionArea>Calen</DescripcionArea>
+					<CodigoCentro>103646</CodigoCentro>
+					<DescripcionCentro>CALEN</DescripcionCentro>
+					<CodigoBancoNatural>0</CodigoBancoNatural>
+					<DescripcionBancoNatural />
+					<CodigoComuna>10201</CodigoComuna>
+					<DescripcionComuna>CASTRO</DescripcionComuna>
+					<FechaExtraccion>2022-07-04</FechaExtraccion>
+					<CodigoLaboratorio>20</CodigoLaboratorio>
+					<NombreLaboratorio>PLANCTON ANDINO SPA - CASTRO</NombreLaboratorio>
+					<EstacionMonitoreo>C1</EstacionMonitoreo>
+					<Latitud>-42,33927</Latitud>
+					<Longitud>-73,44594</Longitud>
+					<TemperaturaSM>9.10</TemperaturaSM>
+					<pH>0.00</pH>
+					<Salinidad>0.00</Salinidad>
+					<Oxigeno>0.00</Oxigeno>
+					<FechaResultado xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true">
+					</FechaResultado>
+					<EntidadMuestreo>AQUATECMA LTDA.</EntidadMuestreo>
+					<Estado>INICIADO</Estado>
+					<Signo />
+					<TipoAnalisis>FITOPLANCTON</TipoAnalisis>
+					<LOD>0.0000</LOD>
+					<LimiteAccion>0.00</LimiteAccion>
+					<NivelRegulatorio>0.00</NivelRegulatorio>
+					<GlosaResultado />
+					<AgenteCausal1 />
+					<CelMl1 />
+					<RED1 />
+					<AgenteCausal2 />
+					<CelMl2 />
+					<RED2 />
+					<AgenteCausal3 />
+					<CelMl3 />
+					<RED3 />
+					<AgenteCausal4 />
+					<CelMl4 />
+					<RED4 />
+					<AgenteCausal5 />
+					<CelMl5 />
+					<RED5 />
+				</SDTSNP.SDTSNPItem>
+				<SDTSNP.SDTSNPItem xmlns="WEBSERVICE">
+					<Folio>650812</Folio>
+					<CodigoAnalisis>6</CodigoAnalisis>
+					<DescripcionAnalisis>INTEGRADA CUANTITATIVA</DescripcionAnalisis>
+					<Resultado>0.0000</Resultado>
+					<CodigoArea>10228</CodigoArea>
+					<DescripcionArea>Calen</DescripcionArea>
+					<CodigoCentro>103646</CodigoCentro>
+					<DescripcionCentro>CALEN</DescripcionCentro>
+					<CodigoBancoNatural>0</CodigoBancoNatural>
+					<DescripcionBancoNatural />
+					<CodigoComuna>10201</CodigoComuna>
+					<DescripcionComuna>CASTRO</DescripcionComuna>
+					<FechaExtraccion>2022-07-04</FechaExtraccion>
+					<CodigoLaboratorio>20</CodigoLaboratorio>
+					<NombreLaboratorio>PLANCTON ANDINO SPA - CASTRO</NombreLaboratorio>
+					<EstacionMonitoreo>C1</EstacionMonitoreo>
+					<Latitud>-42,33927</Latitud>
+					<Longitud>-73,44594</Longitud>
+					<TemperaturaSM>9.10</TemperaturaSM>
+					<pH>0.00</pH>
+					<Salinidad>0.00</Salinidad>
+					<Oxigeno>0.00</Oxigeno>
+					<FechaResultado xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true">
+					</FechaResultado>
+					<EntidadMuestreo>AQUATECMA LTDA.</EntidadMuestreo>
+					<Estado>INICIADO</Estado>
+					<Signo />
+					<TipoAnalisis>FITOPLANCTON</TipoAnalisis>
+					<LOD>0.0000</LOD>
+					<LimiteAccion>0.00</LimiteAccion>
+					<NivelRegulatorio>0.00</NivelRegulatorio>
+					<GlosaResultado />
+					<AgenteCausal1 />
+					<CelMl1 />
+					<RED1 />
+					<AgenteCausal2 />
+					<CelMl2 />
+					<RED2 />
+					<AgenteCausal3 />
+					<CelMl3 />
+					<RED3 />
+					<AgenteCausal4 />
+					<CelMl4 />
+					<RED4 />
+					<AgenteCausal5 />
+					<CelMl5 />
+					<RED5 />
+				</SDTSNP.SDTSNPItem>
+				<SDTSNP.SDTSNPItem xmlns="WEBSERVICE">
+					<Folio>650813</Folio>
+					<CodigoAnalisis>5</CodigoAnalisis>
+					<DescripcionAnalisis>RED CUALITATIVA</DescripcionAnalisis>
+					<Resultado>0.0000</Resultado>
+					<CodigoArea>10228</CodigoArea>
+					<DescripcionArea>Calen</DescripcionArea>
+					<CodigoCentro>103538</CodigoCentro>
+					<DescripcionCentro>SUR PUNTA SAN JUAN</DescripcionCentro>
+					<CodigoBancoNatural>0</CodigoBancoNatural>
+					<DescripcionBancoNatural />
+					<CodigoComuna>10201</CodigoComuna>
+					<DescripcionComuna>CASTRO</DescripcionComuna>
+					<FechaExtraccion>2022-07-04</FechaExtraccion>
+					<CodigoLaboratorio>20</CodigoLaboratorio>
+					<NombreLaboratorio>PLANCTON ANDINO SPA - CASTRO</NombreLaboratorio>
+					<EstacionMonitoreo>C5</EstacionMonitoreo>
+					<Latitud>-42,35324</Latitud>
+					<Longitud>-73,51874</Longitud>
+					<TemperaturaSM>9.30</TemperaturaSM>
+					<pH>0.00</pH>
+					<Salinidad>0.00</Salinidad>
+					<Oxigeno>0.00</Oxigeno>
+					<FechaResultado xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true">
+					</FechaResultado>
+					<EntidadMuestreo>AQUATECMA LTDA.</EntidadMuestreo>
+					<Estado>INICIADO</Estado>
+					<Signo />
+					<TipoAnalisis>FITOPLANCTON</TipoAnalisis>
+					<LOD>0.0000</LOD>
+					<LimiteAccion>0.00</LimiteAccion>
+					<NivelRegulatorio>0.00</NivelRegulatorio>
+					<GlosaResultado />
+					<AgenteCausal1 />
+					<CelMl1 />
+					<RED1 />
+					<AgenteCausal2 />
+					<CelMl2 />
+					<RED2 />
+					<AgenteCausal3 />
+					<CelMl3 />
+					<RED3 />
+					<AgenteCausal4 />
+					<CelMl4 />
+					<RED4 />
+					<AgenteCausal5 />
+					<CelMl5 />
+					<RED5 />
+				</SDTSNP.SDTSNPItem>
+				<SDTSNP.SDTSNPItem xmlns="WEBSERVICE">
+					<Folio>650813</Folio>
+					<CodigoAnalisis>6</CodigoAnalisis>
+					<DescripcionAnalisis>INTEGRADA CUANTITATIVA</DescripcionAnalisis>
+					<Resultado>0.0000</Resultado>
+					<CodigoArea>10228</CodigoArea>
+					<DescripcionArea>Calen</DescripcionArea>
+					<CodigoCentro>103538</CodigoCentro>
+					<DescripcionCentro>SUR PUNTA SAN JUAN</DescripcionCentro>
+					<CodigoBancoNatural>0</CodigoBancoNatural>
+					<DescripcionBancoNatural />
+					<CodigoComuna>10201</CodigoComuna>
+					<DescripcionComuna>CASTRO</DescripcionComuna>
+					<FechaExtraccion>2022-07-04</FechaExtraccion>
+					<CodigoLaboratorio>20</CodigoLaboratorio>
+					<NombreLaboratorio>PLANCTON ANDINO SPA - CASTRO</NombreLaboratorio>
+					<EstacionMonitoreo>C5</EstacionMonitoreo>
+					<Latitud>-42,35324</Latitud>
+					<Longitud>-73,51874</Longitud>
+					<TemperaturaSM>9.30</TemperaturaSM>
+					<pH>0.00</pH>
+					<Salinidad>0.00</Salinidad>
+					<Oxigeno>0.00</Oxigeno>
+					<FechaResultado xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true">
+					</FechaResultado>
+					<EntidadMuestreo>AQUATECMA LTDA.</EntidadMuestreo>
+					<Estado>INICIADO</Estado>
+					<Signo />
+					<TipoAnalisis>FITOPLANCTON</TipoAnalisis>
+					<LOD>0.0000</LOD>
+					<LimiteAccion>0.00</LimiteAccion>
+					<NivelRegulatorio>0.00</NivelRegulatorio>
+					<GlosaResultado />
+					<AgenteCausal1 />
+					<CelMl1 />
+					<RED1 />
+					<AgenteCausal2 />
+					<CelMl2 />
+					<RED2 />
+					<AgenteCausal3 />
+					<CelMl3 />
+					<RED3 />
+					<AgenteCausal4 />
+					<CelMl4 />
+					<RED4 />
+					<AgenteCausal5 />
+					<CelMl5 />
+					<RED5 />
+				</SDTSNP.SDTSNPItem>
+				<SDTSNP.SDTSNPItem xmlns="WEBSERVICE">
+					<Folio>650816</Folio>
+					<CodigoAnalisis>5</CodigoAnalisis>
+					<DescripcionAnalisis>RED CUALITATIVA</DescripcionAnalisis>
+					<Resultado>0.0000</Resultado>
+					<CodigoArea>10219</CodigoArea>
+					<DescripcionArea>Quetalco</DescripcionArea>
+					<CodigoCentro>104018</CodigoCentro>
+					<DescripcionCentro>PASO TENAUN, SECTOR ESTE DE PUNTA CHOCOMO</DescripcionCentro>
+					<CodigoBancoNatural>0</CodigoBancoNatural>
+					<DescripcionBancoNatural />
+					<CodigoComuna>10201</CodigoComuna>
+					<DescripcionComuna>CASTRO</DescripcionComuna>
+					<FechaExtraccion>2022-07-04</FechaExtraccion>
+					<CodigoLaboratorio>20</CodigoLaboratorio>
+					<NombreLaboratorio>PLANCTON ANDINO SPA - CASTRO</NombreLaboratorio>
+					<EstacionMonitoreo>Q4</EstacionMonitoreo>
+					<Latitud>-42,35509</Latitud>
+					<Longitud>-73,54332</Longitud>
+					<TemperaturaSM>9.00</TemperaturaSM>
+					<pH>0.00</pH>
+					<Salinidad>0.00</Salinidad>
+					<Oxigeno>0.00</Oxigeno>
+					<FechaResultado xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true">
+					</FechaResultado>
+					<EntidadMuestreo>AQUATECMA LTDA.</EntidadMuestreo>
+					<Estado>INICIADO</Estado>
+					<Signo />
+					<TipoAnalisis>FITOPLANCTON</TipoAnalisis>
+					<LOD>0.0000</LOD>
+					<LimiteAccion>0.00</LimiteAccion>
+					<NivelRegulatorio>0.00</NivelRegulatorio>
+					<GlosaResultado />
+					<AgenteCausal1 />
+					<CelMl1 />
+					<RED1 />
+					<AgenteCausal2 />
+					<CelMl2 />
+					<RED2 />
+					<AgenteCausal3 />
+					<CelMl3 />
+					<RED3 />
+					<AgenteCausal4 />
+					<CelMl4 />
+					<RED4 />
+					<AgenteCausal5 />
+					<CelMl5 />
+					<RED5 />
+				</SDTSNP.SDTSNPItem>
+				<SDTSNP.SDTSNPItem xmlns="WEBSERVICE">
+					<Folio>650816</Folio>
+					<CodigoAnalisis>6</CodigoAnalisis>
+					<DescripcionAnalisis>INTEGRADA CUANTITATIVA</DescripcionAnalisis>
+					<Resultado>0.0000</Resultado>
+					<CodigoArea>10219</CodigoArea>
+					<DescripcionArea>Quetalco</DescripcionArea>
+					<CodigoCentro>104018</CodigoCentro>
+					<DescripcionCentro>PASO TENAUN, SECTOR ESTE DE PUNTA CHOCOMO</DescripcionCentro>
+					<CodigoBancoNatural>0</CodigoBancoNatural>
+					<DescripcionBancoNatural />
+					<CodigoComuna>10201</CodigoComuna>
+					<DescripcionComuna>CASTRO</DescripcionComuna>
+					<FechaExtraccion>2022-07-04</FechaExtraccion>
+					<CodigoLaboratorio>20</CodigoLaboratorio>
+					<NombreLaboratorio>PLANCTON ANDINO SPA - CASTRO</NombreLaboratorio>
+					<EstacionMonitoreo>Q4</EstacionMonitoreo>
+					<Latitud>-42,35509</Latitud>
+					<Longitud>-73,54332</Longitud>
+					<TemperaturaSM>9.00</TemperaturaSM>
+					<pH>0.00</pH>
+					<Salinidad>0.00</Salinidad>
+					<Oxigeno>0.00</Oxigeno>
+					<FechaResultado xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true">
+					</FechaResultado>
+					<EntidadMuestreo>AQUATECMA LTDA.</EntidadMuestreo>
+					<Estado>INICIADO</Estado>
+					<Signo />
+					<TipoAnalisis>FITOPLANCTON</TipoAnalisis>
+					<LOD>0.0000</LOD>
+					<LimiteAccion>0.00</LimiteAccion>
+					<NivelRegulatorio>0.00</NivelRegulatorio>
+					<GlosaResultado />
+					<AgenteCausal1 />
+					<CelMl1 />
+					<RED1 />
+					<AgenteCausal2 />
+					<CelMl2 />
+					<RED2 />
+					<AgenteCausal3 />
+					<CelMl3 />
+					<RED3 />
+					<AgenteCausal4 />
+					<CelMl4 />
+					<RED4 />
+					<AgenteCausal5 />
+					<CelMl5 />
+					<RED5 />
+				</SDTSNP.SDTSNPItem>
+				<SDTSNP.SDTSNPItem xmlns="WEBSERVICE">
+					<Folio>650817</Folio>
+					<CodigoAnalisis>5</CodigoAnalisis>
+					<DescripcionAnalisis>RED CUALITATIVA</DescripcionAnalisis>
+					<Resultado>0.0000</Resultado>
+					<CodigoArea>10219</CodigoArea>
+					<DescripcionArea>Quetalco</DescripcionArea>
+					<CodigoCentro>103668</CodigoCentro>
+					<DescripcionCentro>QUIQUEL</DescripcionCentro>
+					<CodigoBancoNatural>0</CodigoBancoNatural>
+					<DescripcionBancoNatural />
+					<CodigoComuna>10201</CodigoComuna>
+					<DescripcionComuna>CASTRO</DescripcionComuna>
+					<FechaExtraccion>2022-07-04</FechaExtraccion>
+					<CodigoLaboratorio>20</CodigoLaboratorio>
+					<NombreLaboratorio>PLANCTON ANDINO SPA - CASTRO</NombreLaboratorio>
+					<EstacionMonitoreo>Q6</EstacionMonitoreo>
+					<Latitud>-42,36770</Latitud>
+					<Longitud>-73,57808</Longitud>
+					<TemperaturaSM>9.10</TemperaturaSM>
+					<pH>0.00</pH>
+					<Salinidad>0.00</Salinidad>
+					<Oxigeno>0.00</Oxigeno>
+					<FechaResultado xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true">
+					</FechaResultado>
+					<EntidadMuestreo>AQUATECMA LTDA.</EntidadMuestreo>
+					<Estado>INICIADO</Estado>
+					<Signo />
+					<TipoAnalisis>FITOPLANCTON</TipoAnalisis>
+					<LOD>0.0000</LOD>
+					<LimiteAccion>0.00</LimiteAccion>
+					<NivelRegulatorio>0.00</NivelRegulatorio>
+					<GlosaResultado />
+					<AgenteCausal1 />
+					<CelMl1 />
+					<RED1 />
+					<AgenteCausal2 />
+					<CelMl2 />
+					<RED2 />
+					<AgenteCausal3 />
+					<CelMl3 />
+					<RED3 />
+					<AgenteCausal4 />
+					<CelMl4 />
+					<RED4 />
+					<AgenteCausal5 />
+					<CelMl5 />
+					<RED5 />
+				</SDTSNP.SDTSNPItem>
+				<SDTSNP.SDTSNPItem xmlns="WEBSERVICE">
+					<Folio>650817</Folio>
+					<CodigoAnalisis>6</CodigoAnalisis>
+					<DescripcionAnalisis>INTEGRADA CUANTITATIVA</DescripcionAnalisis>
+					<Resultado>0.0000</Resultado>
+					<CodigoArea>10219</CodigoArea>
+					<DescripcionArea>Quetalco</DescripcionArea>
+					<CodigoCentro>103668</CodigoCentro>
+					<DescripcionCentro>QUIQUEL</DescripcionCentro>
+					<CodigoBancoNatural>0</CodigoBancoNatural>
+					<DescripcionBancoNatural />
+					<CodigoComuna>10201</CodigoComuna>
+					<DescripcionComuna>CASTRO</DescripcionComuna>
+					<FechaExtraccion>2022-07-04</FechaExtraccion>
+					<CodigoLaboratorio>20</CodigoLaboratorio>
+					<NombreLaboratorio>PLANCTON ANDINO SPA - CASTRO</NombreLaboratorio>
+					<EstacionMonitoreo>Q6</EstacionMonitoreo>
+					<Latitud>-42,36770</Latitud>
+					<Longitud>-73,57808</Longitud>
+					<TemperaturaSM>9.10</TemperaturaSM>
+					<pH>0.00</pH>
+					<Salinidad>0.00</Salinidad>
+					<Oxigeno>0.00</Oxigeno>
+					<FechaResultado xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true">
+					</FechaResultado>
+					<EntidadMuestreo>AQUATECMA LTDA.</EntidadMuestreo>
+					<Estado>INICIADO</Estado>
+					<Signo />
+					<TipoAnalisis>FITOPLANCTON</TipoAnalisis>
+					<LOD>0.0000</LOD>
+					<LimiteAccion>0.00</LimiteAccion>
+					<NivelRegulatorio>0.00</NivelRegulatorio>
+					<GlosaResultado />
+					<AgenteCausal1 />
+					<CelMl1 />
+					<RED1 />
+					<AgenteCausal2 />
+					<CelMl2 />
+					<RED2 />
+					<AgenteCausal3 />
+					<CelMl3 />
+					<RED3 />
+					<AgenteCausal4 />
+					<CelMl4 />
+					<RED4 />
+					<AgenteCausal5 />
+					<CelMl5 />
+					<RED5 />
+				</SDTSNP.SDTSNPItem>
+				<SDTSNP.SDTSNPItem xmlns="WEBSERVICE">
+					<Folio>650818</Folio>
+					<CodigoAnalisis>5</CodigoAnalisis>
+					<DescripcionAnalisis>RED CUALITATIVA</DescripcionAnalisis>
+					<Resultado>0.0000</Resultado>
+					<CodigoArea>10219</CodigoArea>
+					<DescripcionArea>Quetalco</DescripcionArea>
+					<CodigoCentro>102468</CodigoCentro>
+					<DescripcionCentro>CENTRO DIAN JUAN SOTOMAYOR  102468</DescripcionCentro>
+					<CodigoBancoNatural>0</CodigoBancoNatural>
+					<DescripcionBancoNatural />
+					<CodigoComuna>10201</CodigoComuna>
+					<DescripcionComuna>CASTRO</DescripcionComuna>
+					<FechaExtraccion>2022-07-04</FechaExtraccion>
+					<CodigoLaboratorio>20</CodigoLaboratorio>
+					<NombreLaboratorio>PLANCTON ANDINO SPA - CASTRO</NombreLaboratorio>
+					<EstacionMonitoreo>Q8</EstacionMonitoreo>
+					<Latitud>-42,38188</Latitud>
+					<Longitud>-73,61433</Longitud>
+					<TemperaturaSM>9.30</TemperaturaSM>
+					<pH>0.00</pH>
+					<Salinidad>0.00</Salinidad>
+					<Oxigeno>0.00</Oxigeno>
+					<FechaResultado xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true">
+					</FechaResultado>
+					<EntidadMuestreo>AQUATECMA LTDA.</EntidadMuestreo>
+					<Estado>INICIADO</Estado>
+					<Signo />
+					<TipoAnalisis>FITOPLANCTON</TipoAnalisis>
+					<LOD>0.0000</LOD>
+					<LimiteAccion>0.00</LimiteAccion>
+					<NivelRegulatorio>0.00</NivelRegulatorio>
+					<GlosaResultado />
+					<AgenteCausal1 />
+					<CelMl1 />
+					<RED1 />
+					<AgenteCausal2 />
+					<CelMl2 />
+					<RED2 />
+					<AgenteCausal3 />
+					<CelMl3 />
+					<RED3 />
+					<AgenteCausal4 />
+					<CelMl4 />
+					<RED4 />
+					<AgenteCausal5 />
+					<CelMl5 />
+					<RED5 />
+				</SDTSNP.SDTSNPItem>
+				<SDTSNP.SDTSNPItem xmlns="WEBSERVICE">
+					<Folio>650818</Folio>
+					<CodigoAnalisis>6</CodigoAnalisis>
+					<DescripcionAnalisis>INTEGRADA CUANTITATIVA</DescripcionAnalisis>
+					<Resultado>0.0000</Resultado>
+					<CodigoArea>10219</CodigoArea>
+					<DescripcionArea>Quetalco</DescripcionArea>
+					<CodigoCentro>102468</CodigoCentro>
+					<DescripcionCentro>CENTRO DIAN JUAN SOTOMAYOR  102468</DescripcionCentro>
+					<CodigoBancoNatural>0</CodigoBancoNatural>
+					<DescripcionBancoNatural />
+					<CodigoComuna>10201</CodigoComuna>
+					<DescripcionComuna>CASTRO</DescripcionComuna>
+					<FechaExtraccion>2022-07-04</FechaExtraccion>
+					<CodigoLaboratorio>20</CodigoLaboratorio>
+					<NombreLaboratorio>PLANCTON ANDINO SPA - CASTRO</NombreLaboratorio>
+					<EstacionMonitoreo>Q8</EstacionMonitoreo>
+					<Latitud>-42,38188</Latitud>
+					<Longitud>-73,61433</Longitud>
+					<TemperaturaSM>9.30</TemperaturaSM>
+					<pH>0.00</pH>
+					<Salinidad>0.00</Salinidad>
+					<Oxigeno>0.00</Oxigeno>
+					<FechaResultado xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true">
+					</FechaResultado>
+					<EntidadMuestreo>AQUATECMA LTDA.</EntidadMuestreo>
+					<Estado>INICIADO</Estado>
+					<Signo />
+					<TipoAnalisis>FITOPLANCTON</TipoAnalisis>
+					<LOD>0.0000</LOD>
+					<LimiteAccion>0.00</LimiteAccion>
+					<NivelRegulatorio>0.00</NivelRegulatorio>
+					<GlosaResultado />
+					<AgenteCausal1 />
+					<CelMl1 />
+					<RED1 />
+					<AgenteCausal2 />
+					<CelMl2 />
+					<RED2 />
+					<AgenteCausal3 />
+					<CelMl3 />
+					<RED3 />
+					<AgenteCausal4 />
+					<CelMl4 />
+					<RED4 />
+					<AgenteCausal5 />
+					<CelMl5 />
+					<RED5 />
+				</SDTSNP.SDTSNPItem>
+			</Sdtsnp>
+		</WS_MRSNP.ExecuteResponse>
+	</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+2022-07-04 15:16:08,110 Error during xml -> python translation
+Traceback (most recent call last):
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\simple.py", line 79, in parse_xmlelement
+    return self.pythonvalue(xmlelement.text)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 44, in _wrapper
+    return func(self, re.sub(r"[\n\r\t ]", " ", value).strip())
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 213, in pythonvalue
+    return isodate.parse_date(value)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\isodate\isodates.py", line 203, in parse_date
+    raise ISO8601Error('Unrecognised ISO 8601 date format: %r' % datestring)
+isodate.isoerror.ISO8601Error: Unrecognised ISO 8601 date format: ''
+2022-07-04 15:16:08,126 Error during xml -> python translation
+Traceback (most recent call last):
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\simple.py", line 79, in parse_xmlelement
+    return self.pythonvalue(xmlelement.text)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 44, in _wrapper
+    return func(self, re.sub(r"[\n\r\t ]", " ", value).strip())
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 213, in pythonvalue
+    return isodate.parse_date(value)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\isodate\isodates.py", line 203, in parse_date
+    raise ISO8601Error('Unrecognised ISO 8601 date format: %r' % datestring)
+isodate.isoerror.ISO8601Error: Unrecognised ISO 8601 date format: ''
+2022-07-04 15:16:08,129 Error during xml -> python translation
+Traceback (most recent call last):
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\simple.py", line 79, in parse_xmlelement
+    return self.pythonvalue(xmlelement.text)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 44, in _wrapper
+    return func(self, re.sub(r"[\n\r\t ]", " ", value).strip())
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 213, in pythonvalue
+    return isodate.parse_date(value)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\isodate\isodates.py", line 203, in parse_date
+    raise ISO8601Error('Unrecognised ISO 8601 date format: %r' % datestring)
+isodate.isoerror.ISO8601Error: Unrecognised ISO 8601 date format: ''
+2022-07-04 15:16:08,130 Error during xml -> python translation
+Traceback (most recent call last):
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\simple.py", line 79, in parse_xmlelement
+    return self.pythonvalue(xmlelement.text)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 44, in _wrapper
+    return func(self, re.sub(r"[\n\r\t ]", " ", value).strip())
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 213, in pythonvalue
+    return isodate.parse_date(value)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\isodate\isodates.py", line 203, in parse_date
+    raise ISO8601Error('Unrecognised ISO 8601 date format: %r' % datestring)
+isodate.isoerror.ISO8601Error: Unrecognised ISO 8601 date format: ''
+2022-07-04 15:16:08,131 Error during xml -> python translation
+Traceback (most recent call last):
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\simple.py", line 79, in parse_xmlelement
+    return self.pythonvalue(xmlelement.text)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 44, in _wrapper
+    return func(self, re.sub(r"[\n\r\t ]", " ", value).strip())
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 213, in pythonvalue
+    return isodate.parse_date(value)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\isodate\isodates.py", line 203, in parse_date
+    raise ISO8601Error('Unrecognised ISO 8601 date format: %r' % datestring)
+isodate.isoerror.ISO8601Error: Unrecognised ISO 8601 date format: ''
+2022-07-04 15:16:08,132 Error during xml -> python translation
+Traceback (most recent call last):
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\simple.py", line 79, in parse_xmlelement
+    return self.pythonvalue(xmlelement.text)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 44, in _wrapper
+    return func(self, re.sub(r"[\n\r\t ]", " ", value).strip())
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 213, in pythonvalue
+    return isodate.parse_date(value)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\isodate\isodates.py", line 203, in parse_date
+    raise ISO8601Error('Unrecognised ISO 8601 date format: %r' % datestring)
+isodate.isoerror.ISO8601Error: Unrecognised ISO 8601 date format: ''
+2022-07-04 15:16:08,133 Error during xml -> python translation
+Traceback (most recent call last):
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\simple.py", line 79, in parse_xmlelement
+    return self.pythonvalue(xmlelement.text)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 44, in _wrapper
+    return func(self, re.sub(r"[\n\r\t ]", " ", value).strip())
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 213, in pythonvalue
+    return isodate.parse_date(value)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\isodate\isodates.py", line 203, in parse_date
+    raise ISO8601Error('Unrecognised ISO 8601 date format: %r' % datestring)
+isodate.isoerror.ISO8601Error: Unrecognised ISO 8601 date format: ''
+2022-07-04 15:16:08,134 Error during xml -> python translation
+Traceback (most recent call last):
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\simple.py", line 79, in parse_xmlelement
+    return self.pythonvalue(xmlelement.text)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 44, in _wrapper
+    return func(self, re.sub(r"[\n\r\t ]", " ", value).strip())
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 213, in pythonvalue
+    return isodate.parse_date(value)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\isodate\isodates.py", line 203, in parse_date
+    raise ISO8601Error('Unrecognised ISO 8601 date format: %r' % datestring)
+isodate.isoerror.ISO8601Error: Unrecognised ISO 8601 date format: ''
+2022-07-04 15:16:08,135 Error during xml -> python translation
+Traceback (most recent call last):
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\simple.py", line 79, in parse_xmlelement
+    return self.pythonvalue(xmlelement.text)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 44, in _wrapper
+    return func(self, re.sub(r"[\n\r\t ]", " ", value).strip())
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 213, in pythonvalue
+    return isodate.parse_date(value)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\isodate\isodates.py", line 203, in parse_date
+    raise ISO8601Error('Unrecognised ISO 8601 date format: %r' % datestring)
+isodate.isoerror.ISO8601Error: Unrecognised ISO 8601 date format: ''
+2022-07-04 15:16:08,136 Error during xml -> python translation
+Traceback (most recent call last):
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\simple.py", line 79, in parse_xmlelement
+    return self.pythonvalue(xmlelement.text)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 44, in _wrapper
+    return func(self, re.sub(r"[\n\r\t ]", " ", value).strip())
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\zeep\xsd\types\builtins.py", line 213, in pythonvalue
+    return isodate.parse_date(value)
+  File "C:\Users\Usuario\anaconda3\envs\geo_env\lib\site-packages\isodate\isodates.py", line 203, in parse_date
+    raise ISO8601Error('Unrecognised ISO 8601 date format: %r' % datestring)
+isodate.isoerror.ISO8601Error: Unrecognised ISO 8601 date format: ''
+2022-07-04 15:16:08,138 [OK] - GET_WS_RESPONSE
+2022-07-04 15:16:08,139 [OK] - RESPONSE_TO_DICT
+2022-07-04 15:16:08,148 [OK] - DICT_TO_DF
+2022-07-04 15:16:08,149 [OK] - CREATE_DB_CONNECTION
+2022-07-04 15:16:08,234 [OK] - CREATE_DB_ENGINE
+2022-07-04 15:16:08,241 [OK] - DELETE_RECENT_RECORDS.SQL OPEN_SQL_QUERY
+2022-07-04 15:16:10,657 [OK] - DELETE_OLD_RECORDS
+2022-07-04 15:16:11,486 [OK] - APPEND_NEW_RECORDS
