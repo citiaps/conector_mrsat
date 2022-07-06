@@ -6,6 +6,7 @@ import pandas as pd
 from zeep import Client, Settings, helpers
 from zeep.transports import Transport
 from requests import Session
+from requests.auth import HTTPBasicAuth
 from sqlalchemy import inspect
 from sqlalchemy import create_engine, text
 from datetime import date, datetime
@@ -140,7 +141,7 @@ def check_if_table_exists(db_engine, config_data, logger):
     logger.debug("[OK] - CHECK_IF_TABLE_EXISTS")
     return n_days
 
-def make_client(ws_url, session, settings, logger):
+def create_client(ws_url, session, settings, logger):
     """Generate the WebService client, based on the WS URL and the session and settings parameters.
 
     Args:
@@ -153,7 +154,7 @@ def make_client(ws_url, session, settings, logger):
     """
     client = Client(ws_url, transport = Transport(session= session), settings= settings)
     print("[OK] - Web client successfully created")
-    logger.debug("[OK] - MAKE_CLIENT")
+    logger.debug("[OK] - CREATE_CLIENT")
     return client
 
 def set_settings(logger):
@@ -349,8 +350,8 @@ def main(argv):
     # Set the session's settings
     settings = set_settings(logger)
 
-    # Make the webservice's consumer client
-    client = make_client(ws_url, session, settings, logger)
+    # Create the webservice's consumer client
+    client = create_client(ws_url, session, settings, logger)
 
     # Set the number of days to query based on the existence of the recent records table
     n_days = check_if_table_exists(db_engine, config_data, logger)
@@ -364,7 +365,7 @@ def main(argv):
     # Transform python dict into Pandas DataFrame
     df = dict_to_df(response_dict, logger)
 
-    # Execute the delete_recent_records query if the table previosly exists
+    # Execute the delete_recent_records query if the table previously exists
     if n_days == 2:
 
         # Open the "delete_recent_records.sql" file
