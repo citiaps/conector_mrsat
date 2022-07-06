@@ -274,7 +274,7 @@ def create_log_file(log_path):
     if not os.path.exists(log_path):
         os.makedirs(log_path)
 
-    log_file = log_path + "/mrsat_conector.log"
+    log_file = log_path + "/update_mrsat_hist.log"
     return log_file 
 
 def get_config(filepath=""):
