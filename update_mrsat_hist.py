@@ -246,7 +246,8 @@ def get_max_id(executed_query, logger):
     Returns:
         int
     """
-    max_id = executed_query.fetchone()[0] + 1
+    query = executed_query.fetchone()
+    max_id = query[0] + 1
     print("[OK] - Database table's maximum ID successfully obtained")
     logger.debug("[OK] - GET_MAX_ID")
     return max_id
@@ -283,7 +284,7 @@ def generate_connection(db_engine, logger):
         sqlalchemy.engine.base.Connection
     """
     try:
-        db_con = db_engine.connect().execution_options(autocommit=True)
+        db_con = db_engine.connect().execution_options(autocommit=False)
         print("[OK] - Successfully connected to the database engine")
         logger.debug("[OK] - GENERATE_CONNECTION")
         return db_con
@@ -324,7 +325,9 @@ def create_db_engine(db_connection, logger):
     """
     try:
         conn_args={
-		"TrustServerCertificate": "yes"
+		"TrustServerCertificate": "yes",
+                "Echo": "True",
+                "MARS_Connection": "yes"
 	}
         db_engine = create_engine(db_connection, connect_args=conn_args)
         print("[OK] - SQLAlchemy engine succesfully generated")
@@ -356,7 +359,7 @@ def create_db_connection(config_data, logger):
 
     # Case if the DB is SQL Server
     if config_data['sernapesca']['db_type'] == 'mssql+pyodbc':
-        db_connection = db_connection + '?driver=ODBC+Driver+18+for+SQL+Server'
+        db_connection = db_connection + '?driver=ODBC+Driver+17+for+SQL+Server'
 
     print("[OK] - Connection string successfully generated")
     logger.debug("[OK] - CREATE_DB_CONNECTION")
@@ -455,7 +458,7 @@ def main(argv):
 
     # Generate database connection
     db_con = generate_connection(db_engine, logger)
-
+    print(db_con.execute('SELECT MAX("ID") FROM mrsat.mrsat').fetchall())
     # Execute the SQL queries
     executed_id_query = execute_sql_query(db_con, id_query, logger)
     executed_date_query = execute_sql_query(db_con, date_query, logger)
