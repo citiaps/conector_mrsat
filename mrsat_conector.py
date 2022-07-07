@@ -507,10 +507,10 @@ def main(argv):
     # Creates date column
     df = create_date_column(df, logger)
 
-    # Opens the "delete_recent_records.sql" file
+    # Opens the SQL files
     recent_records_query = open_sql_query("delete_recent_records.sql", config_data, 'last_days_table', logger)
     historic_records_query = open_sql_query("delete_recent_records.sql", config_data, 'historic_table', logger)
-    
+    oldest_records_query = open_sql_query("delete_old_records.sql", config_data, 'last_days_table', logger)
 
     # Generates database connection
     db_con = generate_connection(db_engine, logger)
@@ -521,6 +521,9 @@ def main(argv):
 
     # Appends the new records extracted from the WebService ONLY to the recent records table
     append_new_records(df, config_data, db_engine, n_days, 'last_days_table', logger)
+
+    # Delete the oldest records
+    execute_sql_query(db_con, oldest_records_query, logger)
 
     # Opens the 'get_max_id.sql' file
     id_query = open_sql_query("get_max_id.sql", config_data, 'historic_table', logger)
