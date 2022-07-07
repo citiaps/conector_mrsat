@@ -8,5 +8,5 @@ RESULTADOS ESPERADOS:
 */
 
 DELETE FROM {}.{}
-WHERE "FechaExtraccion" > now() - INTERVAL '3 days'
+WHERE DATE_TRUNC('DAY',"FechaExtraccion") > DATE_TRUNC('DAY',now() - INTERVAL '3 days');
 
