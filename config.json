@@ -1,13 +1,13 @@
 {
     "sernapesca": {
-        "db_type": "postgresql",
-        "db": "yoinformo_gis",
-        "schema": "capas_estaticas",
+        "db_type": "mssql+pyodbc",
+        "db": "SNPA",
+        "schema": "mrsat",
         "last_days_table": "mrsat_60days",
-        "historic_table": "mrsat_hist",
-	    "host": "138.197.13.37",
-	    "port": "5432",
-	    "passwd": "citiaps1234",
+        "historic_table": "mrsat",
+	    "host": "10.5.1.18",
+	    "port": "1433",
+	    "passwd": "C1_7Y02aps",
 	    "user": "citiaps"
     },
     "webservice": {
