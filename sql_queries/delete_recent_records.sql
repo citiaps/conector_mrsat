@@ -8,5 +8,5 @@ RESULTADOS ESPERADOS:
 */
 
 DELETE FROM {}.{}
-WHERE CAST(NOW() AS DATE) - CAST("FechaExtraccion" AS DATE) < 4;
+WHERE DATEDIFF(dd, "FechaExtraccion", GETDATE()) <= 2;
 

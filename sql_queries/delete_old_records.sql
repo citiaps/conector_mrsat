@@ -8,4 +8,4 @@ RESULTADOS ESPERADOS:
 */
 
 DELETE FROM {}.{}
-WHERE CAST(NOW() AS DATE) - CAST("FechaExtraccion" AS DATE) > 62;
+WHERE DATEDIFF(dd, "FechaExtraccion", GETDATE()) > 60;
