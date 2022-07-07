@@ -458,7 +458,7 @@ def main(argv):
 
     # Generate database connection
     db_con = generate_connection(db_engine, logger)
-    print(db_con.execute('SELECT MAX("ID") FROM mrsat.mrsat').fetchall())
+    
     # Execute the SQL queries
     executed_id_query = execute_sql_query(db_con, id_query, logger)
     executed_date_query = execute_sql_query(db_con, date_query, logger)
