@@ -362,7 +362,7 @@ def create_db_connection(config_data, logger):
 
     # Case if the DB is SQL Server
     if config_data['sernapesca']['db'] == 'mssql+pyodbc':
-        db_connection = db_connection + '?driver={ODBC Driver 13 for SQL Server}'
+        db_connection = db_connection + '?driver={ODBC Driver 18 for SQL Server}'
 
     print("[OK] - Connection string successfully generated")
     logger.debug("[OK] - CREATE_DB_CONNECTION")
