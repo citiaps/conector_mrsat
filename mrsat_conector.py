@@ -172,7 +172,7 @@ def get_df_n_rows(df, logger):
 
     n_rows_ws = df.shape[0]
     print("[OK] - WebService's DataFrame number of rows successfully calculated")
-    logger.debug("GET_DF_N_ROWS")
+    logger.debug("[OK] - GET_DF_N_ROWS")
     return n_rows_ws
 
 def get_max_id(executed_query, logger):
