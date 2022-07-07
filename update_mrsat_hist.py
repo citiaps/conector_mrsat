@@ -80,7 +80,7 @@ def create_id_column(max_id, n_rows_ws, logger):
     """
 
     id_column = list(range(max_id, max_id + n_rows_ws))
-    print("ID columns successfully created")
+    print("[OK] - ID columns successfully created")
     logger.debug("[OK] - CREATE_ID_COLUMN")
     return id_column
 
@@ -108,7 +108,7 @@ def dict_to_df(response_dict, logger):
     Returns:
         pandas.core.frame.DataFrame
     """
-    df = pd.DataFrame(response_dict["Sdtsnp"]["SDTSNP.SDTSNPItem"])
+    df = pd.DataFrame(response_dict["Sdtsnp"]["SDTSNP.SDTSNPItem"]).sort_values('FechaExtraccion', ascending=False)
     print("[OK] - Python dictionary successfully transformed to pandas DataFrame")
     logger.debug("[OK] - DICT_TO_DF")
     return df
