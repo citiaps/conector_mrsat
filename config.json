@@ -2,8 +2,8 @@
     "sernapesca": {
         "db_type": "postgresql",
         "db": "yoinformo_gis",
-        "schema": "entradas",
-        "last_days_table": "gestio_sp",
+        "schema": "capas_estaticas",
+        "last_days_table": "mrsat_60days",
         "historic_table": "mrsat_hist",
 	    "host": "138.197.13.37",
 	    "port": "5432",
