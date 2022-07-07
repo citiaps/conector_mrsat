@@ -11,42 +11,31 @@ from sqlalchemy import inspect
 from sqlalchemy import create_engine, text
 from datetime import date, datetime
 
-def append_new_records(df, config_data, db_engine, n_days, table, logger):
-    """Append the records from the past 3 days to the database table with toxicologic data.
+
+def append_missing_records(df, config_data, db_engine, logger):
+    """Append the missing records to the mrsat historic table.
 
     Args:
         df (pandas.core.frame.DataFrame): Dataframe with the new records.
         config_data (dict): config.json parameters.
         db_engine (sqlalchemy.engine.base.Engine): Database sqlalchemy engine.
-        n_days (int): Number of days queried to the WebService.
-        table (str): Name of the table to use on the query, based on the confif.json table name.
         
     Raises:
         SAWarning: Did not recognize type 'geometry' of column 'geom'
     """
     try:
-        df.to_sql(config_data['sernapesca'][table], 
+        df.to_sql(config_data['sernapesca']['historic_table'], 
                     db_engine, 
                     if_exists = 'append', 
                     schema = config_data['sernapesca']['schema'], 
                     index = False)
 
-        # Case if the table previously exists
-        if n_days == 3:
-            print("[OK] - new records successfully appended to " + config_data['sernapesca'][table] + " table")
-        
-        # Case if the table doesn't exists
-        else:
-            print("[OK] - " + config_data['sernapesca'][table] + " table successfully created")
-        
-        logger.debug("[OK] - APPEND_NEW_RECORDS")
+        logger.debug("[OK] - APPEND_MISSING_RECORDS")
 
     except Exception as e:
-        print(e)
-        print("[ERROR] - Appending the new records to the existing table")
-        logger.error('[ERROR] - APPEND_NEW_RECORDS')
+        print("[ERROR] - Appending the mising records to the existing table")
+        logger.error('[ERROR] - APPEND_MISSING_RECORDS')
         sys.exit(2)
-
 
 def create_date_column(df, logger):
     """Inserts column with the current datetime to the WS DataFrame.
@@ -59,74 +48,9 @@ def create_date_column(df, logger):
     """
 
     df["FechaActualización"] = datetime.now()
-    print("[OK] - Column of dates successfully inserted to the WS DataFrame")
+    print("[OK] - Column of dates successfully insterted to the WS DataFrame")
     logger.debug("[OK] - CREATE_DATE_COLUMN")
     return df
-
-def execute_sql_query(db_con, sql_query, logger):
-    """Executes the given SQL query and stores the result as a sqlalchemy Cursor.
-    
-    Args:
-        db_con (sqlalchemy.engine.base.Connection): Database connection.
-        sql_query (sqlalchemy.sql.elements.TextClause): SQl query as sqlalchmey Text Clause.
-    
-    Returns:
-        sqlalchemy.engine.cursor.LegacyCursorResult
-    """
-    try:
-        executed_query = db_con.execute(sql_query)
-        print("[OK] - SQL query successfully executed")
-        logger.debug("[OK] - EXECUTE_SQL_QUERY")
-        return executed_query
-
-    except Exception as e:
-        print("[ERROR] - Executing the SQL query")
-        print(e)
-        logger.error('[ERROR] - EXECUTE_SQL_QUERY')
-        sys.exit(2)
-
-
-def generate_connection(db_engine, logger):
-    """Connects to the given sqlalchemy database engine.
-    
-    Args:
-        db_engine (sqlalchemy.engine.base.Engine): Database sqlalchemy engine.
-    
-    Returns:
-        sqlalchemy.engine.base.Connection
-    """
-    try:
-        db_con = db_engine.connect().execution_options(autocommit=True)
-        print("[OK] - Successfully connected to the database engine")
-        logger.debug("[OK] - GENERATE_CONNECTION")
-        return db_con
-
-    except Exception as e:
-        print("[ERROR] - Connecting to the database engine")
-        print(e)
-        logger.error('[ERROR] - GENERATE_CONNECTION')
-        sys.exit(2)
-
-def open_sql_query(sql_file, config_data, config_table, logger):
-    """Opens the given SQL file.
-    
-    Args:
-        sql_file (str): Name of the .sql file that contains the query.
-        config_data (dict): config.json parameters.
-        config_table (str): Name of the table to use on the query, based on the confif.json table name.
-    
-    Returns:
-        sqlalchemy.sql.elements.TextClause
-    """
-    table = config_data['sernapesca'][config_table]
-    schema = config_data['sernapesca']['schema']
-
-    with open("./sql_queries/" + sql_file, encoding = "utf8") as file:
-        sql_query = text(file.read().format(schema, table))
-    print("[OK] - SQL file successfully opened")
-    logger.debug("[OK] - OPEN_SQL_QUERY")
-    return sql_query
-
 
 def insert_id_column(df, id_column, logger):
     """Inserts the list of IDs to the WS DataFrame.
@@ -172,22 +96,8 @@ def get_df_n_rows(df, logger):
 
     n_rows_ws = df.shape[0]
     print("[OK] - WebService's DataFrame number of rows successfully calculated")
-    logger.debug("[OK] - GET_DF_N_ROWS")
+    logger.debug("GET_DF_N_ROWS")
     return n_rows_ws
-
-def get_max_id(executed_query, logger):
-    """Extracts the maximum ID number from the table stored on the database.
-    
-    Args:
-        executed_query (sqlalchemy.engine.cursor.LegacyCursorResult): 'get_max_id.sql' executed query.
-    
-    Returns:
-        int
-    """
-    max_id = executed_query.fetchone()[0] + 1
-    print("[OK] - Database table's maximum ID successfully obtained")
-    logger.debug("[OK] - GET_MAX_ID")
-    return max_id
 
 def dict_to_df(response_dict, logger):
     """Transforms the Python dict to a pandas DataFrame.
@@ -217,7 +127,7 @@ def response_to_dict(ws_response, logger):
     logger.debug("[OK] - RESPONSE_TO_DICT")
     return response_dict
 
-def get_ws_response(config_data, client, n_days, logger):
+def get_ws_response(config_data, client, missing_days, logger):
     """Gets the past 60 days toxicologic records from the mrSAT WebService as a zeep response object.
 
     Args:
@@ -231,33 +141,10 @@ def get_ws_response(config_data, client, n_days, logger):
     ws_reponse = client.service.Execute(Usuario = config_data['webservice']['user'], 
                                         Password = config_data['webservice']['passwd'],
                                         Fechaconsulta = str(date.today()),
-                                        Numerodias = n_days)
-    print("[OK] - Web Service response successfully gotten. " + str(n_days) + " days queried.")
+                                        Numerodias = missing_days)
+    print("[OK] - Web Service response successfully gotten. " + str(missing_days + 1) + " days queried.")
     logger.debug("[OK] - GET_WS_RESPONSE")
     return ws_reponse
-
-def check_if_table_exists(db_engine, config_data, logger):
-    """Check if the recent records table exists on the database. This determines the number of days to query to the WS. 
-
-    Args:
-        db_engine (sqlalchemy.engine.base.Engine): Database sqlalchemy engine.
-        config_data (dict): config.json parameters.
-
-    Returns:
-        int
-    """
-    table = config_data['sernapesca']['last_days_table']
-    schema = config_data['sernapesca']['schema']
-    
-    if inspect(db_engine).has_table(table, schema):
-        n_days = 3
-
-    else:
-        n_days = 61
-
-    print("[OK] - Recent records table successfully checked")
-    logger.debug("[OK] - CHECK_IF_TABLE_EXISTS")
-    return n_days
 
 def create_client(ws_url, session, settings, logger):
     """Generate the WebService client, based on the WS URL and the session and settings parameters.
@@ -321,6 +208,110 @@ def generate_ws_url_string(config_data, logger):
     print("[OK] - WebService URL string successfully generated")
     logger.debug("[OK] - GENERATE_WS_URL_STRING")
     return ws_url
+
+def get_missing_days(max_date, logger):
+    """Gets the day difference between the current date and the maximum date stored on the database table.
+    
+    Args:
+        max_date (datetime.date): maximum date extracted from the database table.
+    
+    Returns:
+        datetime.date
+    """
+    date_today = date.today()
+    missing_days = (date_today - max_date).days - 1
+    print("[OK] - Database table missing days successfully calculated")
+    return missing_days
+
+def get_max_date(executed_query, logger):
+    """Extracts the record's maximum date from the table stored on the database.
+    
+    Args:
+        executed_query (sqlalchemy.engine.cursor.LegacyCursorResult): 'get_max_date.sql' executed query.
+    
+    Returns:
+        datetime.date
+    """
+    max_date = executed_query.fetchone()[0].date()
+    print("[OK] - Database table's maximum date successfully obtained")
+    logger.debug("[OK] - GET_MAX_date")
+    return max_date
+
+def get_max_id(executed_query, logger):
+    """Extracts the maximum ID number from the table stored on the database.
+    
+    Args:
+        executed_query (sqlalchemy.engine.cursor.LegacyCursorResult): 'get_max_id.sql' executed query.
+    
+    Returns:
+        int
+    """
+    max_id = executed_query.fetchone()[0] + 1
+    print("[OK] - Database table's maximum ID successfully obtained")
+    logger.debug("[OK] - GET_MAX_ID")
+    return max_id
+
+def execute_sql_query(db_con, sql_query, logger):
+    """Executes the given SQL query and stores the result as a sqlalchemy Cursor.
+    
+    Args:
+        db_con (sqlalchemy.engine.base.Connection): Database connection.
+        sql_query (sqlalchemy.sql.elements.TextClause): SQl query as sqlalchmey Text Clause.
+    
+    Returns:
+        sqlalchemy.engine.cursor.LegacyCursorResult
+    """
+    try:
+        executed_query = db_con.execute(sql_query)
+        print("[OK] - SQL query successfully executed")
+        logger.debug("[OK] - EXECUTE_SQL_QUERY")
+        return executed_query
+
+    except Exception as e:
+        print("[ERROR] - Executing the SQL query")
+        print(e)
+        logger.error('[ERROR] - EXECUTE_SQL_QUERY')
+        sys.exit(2)
+
+def generate_connection(db_engine, logger):
+    """Connects to the given sqlalchemy database engine.
+    
+    Args:
+        db_engine (sqlalchemy.engine.base.Engine): Database sqlalchemy engine.
+    
+    Returns:
+        sqlalchemy.engine.base.Connection
+    """
+    try:
+        db_con = db_engine.connect().execution_options(autocommit=True)
+        print("[OK] - Successfully connected to the database engine")
+        logger.debug("[OK] - GENERATE_CONNECTION")
+        return db_con
+
+    except Exception as e:
+        print("[ERROR] - Connecting to the database engine")
+        print(e)
+        logger.error('[ERROR] - GENERATE_CONNECTION')
+        sys.exit(2)
+
+def open_sql_query(sql_file, config_data, logger):
+    """Opens the given SQL file.
+    
+    Args:
+        sql_file (str): Name of the .sql file that contains the query.
+        config_data (dict): config.json parameters.
+    
+    Returns:
+        sqlalchemy.sql.elements.TextClause
+    """
+    schema = config_data['sernapesca']['schema']
+    table = config_data['sernapesca']['historic_table']
+
+    with open("./sql_queries/" + sql_file, encoding = "utf8") as file:
+        sql_query = text(file.read().format(schema, table))
+    print("[OK] - SQL file successfully opened")
+    logger.debug("[OK] - OPEN_SQL_QUERY")
+    return sql_query
 
 def create_db_engine(db_connection, logger):
     """Creates a sqlalchemy database engine based on the database connection string.
@@ -397,7 +388,7 @@ def create_log_file(log_path):
     if not os.path.exists(log_path):
         os.makedirs(log_path)
 
-    log_file = log_path + "/mrsat_conector.log"
+    log_file = log_path + "/update_mrsat_hist.log"
     return log_file 
 
 def get_config(filepath=""):
@@ -434,105 +425,68 @@ def get_parameters(argv):
     config_filepath = argv[1]
     return config_filepath
 
-
 def main(argv):
     start = datetime.now()
 
-    # Gets parameters
+    # Get parameters
     config_filepath = get_parameters(argv)
 
-    # Gets service config parameters
+    # Get service config parameters
     config_data = get_config(config_filepath)
 
     # Create the log file if not exists
     log_file = create_log_file(config_data["log_path"])
 
-    # Creates the logger
+    # Create the logger
     logger = create_logger(log_file)
 
-    # Creates string with the given database parameters
+    # Create string with the given database parameters
     db_connection = create_db_connection(config_data, logger)
 
-    # Creates sqlalchemy engine based on database parameters
+    # Create sqlalchemy engine based on database parameters
     db_engine = create_db_engine(db_connection, logger)
     
-    # Gets the web service URL
-    ws_url = generate_ws_url_string(config_data, logger)
+    # Open requeried SQL queries 
+    id_query = open_sql_query("get_max_id.sql", config_data, logger)
+    date_query = open_sql_query("get_max_date.sql", config_data, logger)
 
-    # Generates the client's session
-    session = generate_session(logger)
-
-    # Sets the session's user and password
-    set_user_and_psswd(session, config_data, logger)
-
-    # Sets the session's settings
-    settings = set_settings(logger)
-
-    # Creates the webservice's consumer client
-    client = create_client(ws_url, session, settings, logger)
-
-    # Sets the number of days to query based on the existence of the recent records table
-    n_days = check_if_table_exists(db_engine, config_data, logger)
-
-    # Creates the table if not exists
-    if n_days == 61:
-
-        # Gets the WebService response from the past months
-        ws_response = get_ws_response(config_data, client, n_days, logger)
-
-        # Transforms the WebService response into a Python dictionary
-        response_dict = response_to_dict(ws_response, logger)
-
-        # Transforms python dict into Pandas DataFrame
-        df = dict_to_df(response_dict, logger)
-
-        # Creates a date column
-        df = create_date_column(df, logger)
-
-        # Create the table on the database
-        append_new_records(df, config_data, db_engine, n_days, 'last_days_table', logger)
-
-        # Now the recent records table exists, sets the number of days to 3
-        n_days = 3
-
-    # Gets the WebService response
-    ws_response = get_ws_response(config_data, client, n_days, logger)
-
-    # Transforms the WebService response into a Python dictionary
-    response_dict = response_to_dict(ws_response, logger)
-
-    # Transforms python dict into Pandas DataFrame
-    df = dict_to_df(response_dict, logger)
-
-    # Creates date column
-    df = create_date_column(df, logger)
-
-    # Opens the SQL files
-    recent_records_query = open_sql_query("delete_recent_records.sql", config_data, 'last_days_table', logger)
-    historic_records_query = open_sql_query("delete_recent_records.sql", config_data, 'historic_table', logger)
-    oldest_records_query = open_sql_query("delete_old_records.sql", config_data, 'last_days_table', logger)
-
-    # Generates database connection
+    # Generate database connection
     db_con = generate_connection(db_engine, logger)
 
-    # Deletes the past 3 days records from the database tables
-    execute_sql_query(db_con, recent_records_query, logger)
-    execute_sql_query(db_con, historic_records_query, logger)
-
-    # Appends the new records extracted from the WebService ONLY to the recent records table
-    append_new_records(df, config_data, db_engine, n_days, 'last_days_table', logger)
-
-    # Delete the oldest records
-    execute_sql_query(db_con, oldest_records_query, logger)
-
-    # Opens the 'get_max_id.sql' file
-    id_query = open_sql_query("get_max_id.sql", config_data, 'historic_table', logger)
-
-    # Execute the SQL query
+    # Execute the SQL queries
     executed_id_query = execute_sql_query(db_con, id_query, logger)
+    executed_date_query = execute_sql_query(db_con, date_query, logger)
 
-    # Gets the maximum ID from the database table
+    # Get the maximum ID and Date
     max_id = get_max_id(executed_id_query, logger)
+    max_date = get_max_date(executed_date_query, logger)
+
+    # Get the mrsat_hist missing dates
+    missing_days = get_missing_days(max_date, logger)
+
+    # Get the web service URL
+    ws_url = generate_ws_url_string(config_data, logger)
+
+    # Generate the client's session
+    session = generate_session(logger)
+
+    # Set the session's user and password
+    set_user_and_psswd(session, config_data, logger)
+
+    # Set the session's settings
+    settings = set_settings(logger)
+
+    # Create the webservice's consumer client
+    client = create_client(ws_url, session, settings, logger)
+
+    # Get the WebService response
+    ws_response = get_ws_response(config_data, client, missing_days, logger)
+
+    # Transform the WebService response into a Python dictionary
+    response_dict = response_to_dict(ws_response, logger)
+
+    # Transform python dict into Pandas DataFrame
+    df = dict_to_df(response_dict, logger)
 
     # Get the number of rows of the DataFrame
     n_rows_ws = get_df_n_rows(df, logger)
@@ -542,13 +496,17 @@ def main(argv):
 
     # Insert the ID column into the DataFrame
     df = insert_id_column(df, id_column, logger)
+    
+    # Create column of dates  
+    df = create_date_column(df, logger)
 
-    # Appends the new records extracted from the WebService ONLY to the historic records table
-    append_new_records(df, config_data, db_engine, n_days, 'historic_table', logger)
+    # Append the missing records to the database historic table
+    append_missing_records(df, config_data, db_engine, logger)
 
     end = datetime.now()
 
     print(f"[OK] - Script successfully executed. Time elapsed: {end - start}")
+
 
 if __name__ == "__main__":
     main(sys.argv)

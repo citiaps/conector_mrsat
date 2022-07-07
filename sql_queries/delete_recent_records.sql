@@ -8,5 +8,5 @@ RESULTADOS ESPERADOS:
 */
 
 DELETE FROM {}.{}
-WHERE "FechaExtraccion" > now() - INTERVAL '3 days'
+WHERE CAST(NOW() AS DATE) - CAST("FechaExtraccion" AS DATE) < 4;
 
