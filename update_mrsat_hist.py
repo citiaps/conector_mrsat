@@ -323,7 +323,10 @@ def create_db_engine(db_connection, logger):
         sqlalchemy.engine.base.Engine
     """
     try:
-        db_engine = create_engine(db_connection)
+        conn_args={
+		"TrustServerCertificate": "yes"
+	}
+        db_engine = create_engine(db_connection, connect_args=conn_args)
         print("[OK] - SQLAlchemy engine succesfully generated")
         logger.debug("[OK] - CREATE_DB_ENGINE")
         return db_engine
@@ -352,8 +355,8 @@ def create_db_connection(config_data, logger):
         config_data['sernapesca']['db'])
 
     # Case if the DB is SQL Server
-    if config_data['sernapesca']['db'] == 'mssql+pyodbc':
-        db_connection = db_connection + '?driver=SQL Server'
+    if config_data['sernapesca']['db_type'] == 'mssql+pyodbc':
+        db_connection = db_connection + '?driver=ODBC+Driver+18+for+SQL+Server'
 
     print("[OK] - Connection string successfully generated")
     logger.debug("[OK] - CREATE_DB_CONNECTION")
