@@ -5,15 +5,15 @@
         "schema": "mrsat",
         "last_days_table": "mrsat_60days",
         "historic_table": "mrsat",
-	    "host": "10.5.1.18",
-	    "port": "1433",
-	    "passwd": "C1_7Y02aps",
-	    "user": "citiaps"
+	    "host": "",
+	    "port": "",
+	    "passwd": "",
+	    "user": ""
     },
     "webservice": {
         "url": "http://www.marearoja.cl/WSMRSAT/aws_mrsnp.aspx?wsdl",
-        "user": "UsuWSMrsat",
-        "passwd": "PassWSMrsat"
+        "user": "",
+        "passwd": ""
     },
     "log_path" : "./log"
 }
