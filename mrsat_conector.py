@@ -12,7 +12,7 @@ from sqlalchemy import create_engine, text
 from datetime import date, datetime
 
 def append_new_records(df, config_data, db_engine, n_days, table, logger):
-    """Append the records from the past 3 days to the database table with toxicologic data.
+    """Append the records from the past 2 days to the database table with toxicologic data.
 
     Args:
         df (pandas.core.frame.DataFrame): Dataframe with the new records.
@@ -32,7 +32,7 @@ def append_new_records(df, config_data, db_engine, n_days, table, logger):
                     index = False)
 
         # Case if the table previously exists
-        if n_days == 3:
+        if n_days == 2:
             print("[OK] - new records successfully appended to " + config_data['sernapesca'][table] + " table")
         
         # Case if the table doesn't exists
@@ -250,7 +250,7 @@ def check_if_table_exists(db_engine, config_data, logger):
     schema = config_data['sernapesca']['schema']
     
     if inspect(db_engine).has_table(table, schema):
-        n_days = 3
+        n_days = 2
 
     else:
         n_days = 61
@@ -499,7 +499,7 @@ def main(argv):
         append_new_records(df, config_data, db_engine, n_days, 'last_days_table', logger)
 
         # Now the recent records table exists, sets the number of days to 3
-        n_days = 3
+        n_days = 2
 
     # Gets the WebService response
     ws_response = get_ws_response(config_data, client, n_days, logger)
@@ -521,7 +521,7 @@ def main(argv):
     # Generates database connection
     db_con = generate_connection(db_engine, logger)
 
-    # Deletes the past 3 days records from the database tables
+    # Deletes the past 2 days records from the database tables
     execute_sql_query(db_con, recent_records_query, logger)
     execute_sql_query(db_con, historic_records_query, logger)
 

@@ -108,10 +108,16 @@ def dict_to_df(response_dict, logger):
     Returns:
         pandas.core.frame.DataFrame
     """
-    df = pd.DataFrame(response_dict["Sdtsnp"]["SDTSNP.SDTSNPItem"]).sort_values('FechaExtraccion', ascending=False)
-    print("[OK] - Python dictionary successfully transformed to pandas DataFrame")
-    logger.debug("[OK] - DICT_TO_DF")
-    return df
+    if response_dict['Totregistros'] > 0:
+        df = pd.DataFrame(response_dict["Sdtsnp"]["SDTSNP.SDTSNPItem"]).sort_values('FechaExtraccion', ascending=False)
+        print("[OK] - Python dictionary successfully transformed to pandas DataFrame")
+        logger.debug("[OK] - DICT_TO_DF")
+        return df
+
+    else:
+        print("[WARNING] - There are no records for the days consulted")
+        logger.debug("[WARNING] - DICT_TO_DF")
+        sys.exit(2)
 
 def response_to_dict(ws_response, logger):
     """Transforms the zeep response object to a Python dictionary.
@@ -132,7 +138,7 @@ def get_ws_response(config_data, client, missing_days, logger):
 
     Args:
         config_data (dict): config.json parameters.
-        n_days: Number of days to query based on the existence of the table.
+        missing_days: Number of days to query based on the existence of the table.
         client (zeep.client.Client): zeep Client object.
 
     Returns:
@@ -142,7 +148,7 @@ def get_ws_response(config_data, client, missing_days, logger):
                                         Password = config_data['webservice']['passwd'],
                                         Fechaconsulta = str(date.today()),
                                         Numerodias = missing_days)
-    print("[OK] - Web Service response successfully gotten. " + str(missing_days + 1) + " days queried.")
+    print("[OK] - Web Service response successfully gotten. " + str(missing_days) + " days queried.")
     logger.debug("[OK] - GET_WS_RESPONSE")
     return ws_reponse
 
@@ -219,7 +225,7 @@ def get_missing_days(max_date, logger):
         datetime.date
     """
     date_today = date.today()
-    missing_days = (date_today - max_date).days - 1
+    missing_days = (date_today - max_date).days
     print("[OK] - Database table missing days successfully calculated")
     return missing_days
 
