@@ -148,7 +148,7 @@ def get_ws_response(config_data, client, missing_days, logger):
                                         Password = config_data['webservice']['passwd'],
                                         Fechaconsulta = str(date.today()),
                                         Numerodias = missing_days)
-    print("[OK] - Web Service response successfully gotten. " + str(missing_days) + " days queried.")
+    print("[OK] - Web Service response successfully gotten. " + str(missing_days + 1) + " days queried.")
     logger.debug("[OK] - GET_WS_RESPONSE")
     return ws_reponse
 
@@ -225,7 +225,7 @@ def get_missing_days(max_date, logger):
         datetime.date
      """
     date_today = date.today()
-    missing_days = (date_today - max_date).days
+    missing_days = (date_today - max_date).days - 1
     print("[OK] - Database table missing days successfully calculated")
     return missing_days
 
