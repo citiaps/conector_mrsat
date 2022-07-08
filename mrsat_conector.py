@@ -198,10 +198,16 @@ def dict_to_df(response_dict, logger):
     Returns:
         pandas.core.frame.DataFrame
     """
-    df = pd.DataFrame(response_dict["Sdtsnp"]["SDTSNP.SDTSNPItem"]).sort_values('FechaExtraccion', ascending=False)
-    print("[OK] - Python dictionary successfully transformed to pandas DataFrame")
-    logger.debug("[OK] - DICT_TO_DF")
-    return df
+    if response_dict['Totregistros'] > 0:    
+        df = pd.DataFrame(response_dict["Sdtsnp"]["SDTSNP.SDTSNPItem"]).sort_values('FechaExtraccion', ascending=False)
+        print("[OK] - Python dictionary successfully transformed to pandas DataFrame")
+        logger.debug("[OK] - DICT_TO_DF")
+        return df
+
+    else:
+        print("[WARNING] - There are no records for the days consulted")
+        logger.debug("[WARNING] - DICT_TO_DF")
+        sys.exit(2)
 
 def response_to_dict(ws_response, logger):
     """Transforms the zeep response object to a Python dictionary.

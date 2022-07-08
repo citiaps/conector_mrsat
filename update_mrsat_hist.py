@@ -223,7 +223,7 @@ def get_missing_days(max_date, logger):
     
     Returns:
         datetime.date
-    """
+     """
     date_today = date.today()
     missing_days = (date_today - max_date).days
     print("[OK] - Database table missing days successfully calculated")
@@ -475,6 +475,10 @@ def main(argv):
 
     # Get the mrsat_hist missing dates
     missing_days = get_missing_days(max_date, logger)
+
+    if missing_days == 0:
+        logger.debug("[WARNING] - Historic table already up to date")
+        sys.exit("[WARNING] - Historic table already up to date")
 
     # Get the web service URL
     ws_url = generate_ws_url_string(config_data, logger)
