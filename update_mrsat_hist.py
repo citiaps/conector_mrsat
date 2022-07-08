@@ -476,7 +476,7 @@ def main(argv):
     # Get the mrsat_hist missing dates
     missing_days = get_missing_days(max_date, logger)
 
-    if missing_days == 0:
+    if missing_days == -1:
         logger.debug("[WARNING] - Historic table already up to date")
         sys.exit("[WARNING] - Historic table already up to date")
 
