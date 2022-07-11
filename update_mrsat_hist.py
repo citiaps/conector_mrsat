@@ -386,9 +386,8 @@ def create_logger(log_file):
                     format='%(asctime)s %(message)s',
                     filemode='a')
 
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-    logging.Logger.manager.loggerDict['zeep'].setLevel(logging.CRITICAL)
+    logger = logging.getLogger('zeep')
+    logger.setLevel(logging.CRITICAL)
     return logger
 
 def create_log_file(log_path):
