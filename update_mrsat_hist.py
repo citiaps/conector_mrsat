@@ -387,7 +387,7 @@ def create_logger(log_file):
                     filemode='a')
 
     logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.CRITICAL)
     return logger
 
 def create_log_file(log_path):
