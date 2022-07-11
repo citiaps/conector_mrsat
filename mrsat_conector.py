@@ -239,6 +239,7 @@ def get_ws_response(config_data, client, n_days, logger):
                                         Fechaconsulta = str(date.today()),
                                         Numerodias = n_days)
     print("[OK] - Web Service response successfully gotten. " + str(n_days) + " days queried.")
+    logger.debug("[OK] - GET_WS_RESPONSE")
     return ws_reponse
 
 def check_if_table_exists(db_engine, config_data, logger):
@@ -393,7 +394,7 @@ def create_logger(log_file):
                     filemode='a')
 
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
     return logger
 
 def create_log_file(log_path):
