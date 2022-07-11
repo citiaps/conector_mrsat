@@ -2,3 +2,4 @@ pandas
 zeep
 sqlalchemy
 psycopg2
+pyodbc
