@@ -115,7 +115,7 @@ def dict_to_df(response_dict, logger):
         return df
 
     else:
-        print("[WARNING] - There are no records for the days consulted")
+        print("[WARNING] - There are no records for the queried days")
         logger.debug("[WARNING] - DICT_TO_DF")
         sys.exit(2)
 
@@ -144,6 +144,7 @@ def get_ws_response(config_data, client, missing_days, logger):
     Returns:
         zeep.objects.WS_MRSNP.ExecuteResponse
     """
+    print("[LOADING] - Getting Web Service response")
     ws_reponse = client.service.Execute(Usuario = config_data['webservice']['user'], 
                                         Password = config_data['webservice']['passwd'],
                                         Fechaconsulta = str(date.today()),
@@ -227,6 +228,7 @@ def get_missing_days(max_date, logger):
     date_today = date.today()
     missing_days = (date_today - max_date).days - 1
     print("[OK] - Database table missing days successfully calculated")
+    logger.debug("[OK] - GET_MISSING_DAYS")
     return missing_days
 
 def get_max_date(executed_query, logger):
@@ -240,7 +242,7 @@ def get_max_date(executed_query, logger):
     """
     max_date = executed_query.fetchone()[0].date()
     print("[OK] - Database table's maximum date successfully obtained")
-    logger.debug("[OK] - GET_MAX_date")
+    logger.debug("[OK] - GET_MAX_DATE")
     return max_date
 
 def get_max_id(executed_query, logger):
