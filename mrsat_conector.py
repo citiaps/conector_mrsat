@@ -393,8 +393,8 @@ def create_logger(log_file):
                     format='%(asctime)s %(message)s',
                     filemode='a')
 
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger = logging.getLogger('requests')
+    logger.setLevel(logging.WARNING)
     return logger
 
 def create_log_file(log_path):
