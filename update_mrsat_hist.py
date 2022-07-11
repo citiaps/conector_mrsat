@@ -150,7 +150,6 @@ def get_ws_response(config_data, client, missing_days, logger):
                                         Fechaconsulta = str(date.today()),
                                         Numerodias = missing_days)
     print("[OK] - Web Service response successfully gotten. " + str(missing_days + 1) + " days queried.")
-    logger.debug("[OK] - GET_WS_RESPONSE")
     return ws_reponse
 
 def create_client(ws_url, session, settings, logger):
