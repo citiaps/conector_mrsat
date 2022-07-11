@@ -388,8 +388,7 @@ def create_logger(log_file):
 
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
-    for key in logging.Logger.manager.loggerDict:
-        print(key)
+    logging.getLogger('zeep.client').setLevel(logging.CRITICAL)
     return logger
 
 def create_log_file(log_path):
