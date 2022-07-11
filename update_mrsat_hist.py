@@ -388,7 +388,7 @@ def create_logger(log_file):
 
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
-    for key in logger.Logger.manager.loggerDict:
+    for key in logging.Logger.manager.loggerDict:
         print(key)
     return logger
 
