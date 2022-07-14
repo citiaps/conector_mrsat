@@ -575,7 +575,15 @@ def main(argv):
     print(historic_df)
 
     db_con.close()
+    db_engine.dispose()
     
+    # Create sqlalchemy engine based on database parameters
+    db_engine = create_db_engine(db_connection, logger)
+    
+    # Generate database connection
+    #db_con = generate_connection(db_engine, logger)
+
+
     # Append the missing records to the database tables
     append_missing_records(historic_df, config_data, db_engine, "historic_table", logger)
     print("-------------")
