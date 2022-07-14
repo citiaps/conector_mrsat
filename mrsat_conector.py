@@ -11,7 +11,7 @@ from sqlalchemy import inspect
 from sqlalchemy import create_engine, text
 from datetime import date, datetime
 
-def append_new_records(df, config_data, db_engine, n_days, table, logger):
+def append_new_records(df, config_data, db_engine, n_days, config_table, logger):
     """Append the records from the past 2 days to the database tables.
 
     Args:
@@ -19,21 +19,25 @@ def append_new_records(df, config_data, db_engine, n_days, table, logger):
         config_data (dict): config.json parameters.
         db_engine (sqlalchemy.engine.base.Engine): Database sqlalchemy engine.
         n_days (int): Number of days queried to the WebService.
-        table (str): Name of the table to use on the query, based on the confif.json table name.
+        table (str): Name of the table to use on the query, based on the config.json table name.
         
     Raises:
         SAWarning: Did not recognize type 'geometry' of column 'geom'
     """
+    table = config_data['sernapesca'][config_table]
+    schema = config_data['sernapesca']['schema']
+    
     try:
-        df.to_sql(config_data['sernapesca'][table], 
+        print("[LOADING] - Appending new records to " + table  + " table")
+        df.to_sql(table, 
                     db_engine, 
                     if_exists = 'append', 
-                    schema = config_data['sernapesca']['schema'], 
+                    schema = schema, 
                     index = False)
 
         # Case if the table previously exists
         if n_days == 2:
-            print("[OK] - new records successfully appended to " + config_data['sernapesca'][table] + " table")
+            print("[OK] - new records successfully appended to " + table + " table")
         
         logger.debug("[OK] - APPEND_NEW_RECORDS")
 
