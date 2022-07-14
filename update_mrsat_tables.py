@@ -555,9 +555,12 @@ def main(argv):
     historic_df = create_date_column(historic_df, logger)
     recent_df = create_date_column(recent_df, logger)
 
+    print(historic_df)
+    print(recent_df)
+
     # Append the missing records to the database tables
-    append_missing_records(historic_df, config_data, db_engine, "historic_table", logger)
-    append_missing_records(recent_df, config_data, db_engine, "last_days_table", logger)
+    #append_missing_records(historic_df, config_data, db_engine, "historic_table", logger)
+    #append_missing_records(recent_df, config_data, db_engine, "last_days_table", logger)
 
     end = datetime.now()
 
