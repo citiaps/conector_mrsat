@@ -490,7 +490,7 @@ def main(argv):
     db_con = generate_connection(db_engine, logger)
     
     # Delete the recent records from both tables, to enssurance that the table contents good records.
-    #execute_sql_query(db_con, historic_check_delete, logger)
+    execute_sql_query(db_con, historic_check_delete, logger)
     #execute_sql_query(db_con, recent_check_delete, logger)
     
     # Execute max_date and max_id the SQL queries for both tables
@@ -576,7 +576,7 @@ def main(argv):
     # Append the missing records to the database tables
     append_missing_records(historic_df, config_data, db_engine, "historic_table", logger)
     print("-------------")
-    append_missing_records(recent_df, config_data, db_engine, "last_days_table", logger)
+    #append_missing_records(recent_df, config_data, db_engine, "last_days_table", logger)
 
     end = datetime.now()
 
