@@ -330,6 +330,7 @@ def open_sql_query(sql_file, config_data, config_table, logger):
 
         with open("./sql_queries/" + sql_file, encoding = "utf8") as file:
             formatted_file = file.read().format(schema, table)
+            print(formatted_file)
             sql_query = text(formatted_file)
         print("[OK] - " + sql_file + " SQL file successfully opened")
         logger.debug("[OK] - OPEN_SQL_QUERY")
