@@ -19,17 +19,22 @@ def append_missing_records(df, config_data, db_engine, config_table, logger):
         df (pandas.core.frame.DataFrame): Dataframe with the new records.
         config_data (dict): config.json parameters.
         db_engine (sqlalchemy.engine.base.Engine): Database sqlalchemy engine.
+        config_table (str): Name of the table to use on the query, based on the config.json table name.
         
     Raises:
         SAWarning: Did not recognize type 'geometry' of column 'geom'
     """
+    table = config_data['sernapesca'][config_table]
+    schema = config_data['sernapesca']['schema']
+
     try:
-        df.to_sql(config_data['sernapesca'][config_table], 
+        print("[LOADING] - Appending missing records to " + table  + " table")
+        df.to_sql(table, 
                     db_engine, 
                     if_exists = 'append', 
-                    schema = config_data['sernapesca']['schema'], 
+                    schema = schema, 
                     index = False)
-
+        print("[OK] - missing records successfully appended to " + table + " table")
         logger.debug("[OK] - APPEND_MISSING_RECORDS")
 
     except Exception as e:
@@ -326,12 +331,12 @@ def open_sql_query(sql_file, config_data, config_table, logger):
         with open("./sql_queries/" + sql_file, encoding = "utf8") as file:
             formatted_file = file.read().format(schema, table)
             sql_query = text(formatted_file)
-        print("[OK] - SQL file successfully opened")
+        print("[OK] - " + sql_file + " SQL file successfully opened")
         logger.debug("[OK] - OPEN_SQL_QUERY")
         return sql_query
 
     except Exception as e:
-        print("[ERROR] - Opening SQL file")
+        print("[ERROR] - Opening " + sql_file +" SQL file")
         print(e)
         logger.error('[ERROR] - OPEN_SQL_QUERY')
         sys.exit(2)
@@ -555,12 +560,9 @@ def main(argv):
     historic_df = create_date_column(historic_df, logger)
     recent_df = create_date_column(recent_df, logger)
 
-    print(historic_df)
-    print(recent_df)
-
     # Append the missing records to the database tables
-    #append_missing_records(historic_df, config_data, db_engine, "historic_table", logger)
-    #append_missing_records(recent_df, config_data, db_engine, "last_days_table", logger)
+    append_missing_records(historic_df, config_data, db_engine, "historic_table", logger)
+    append_missing_records(recent_df, config_data, db_engine, "last_days_table", logger)
 
     end = datetime.now()
 
