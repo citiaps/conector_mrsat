@@ -492,7 +492,7 @@ def main(argv):
     
     # Delete the recent records from both tables, to enssurance that the table contents good records.
     execute_sql_query(db_con, historic_check_delete, logger)
-    #execute_sql_query(db_con, recent_check_delete, logger)
+    execute_sql_query(db_con, recent_check_delete, logger)
     
     # Execute max_date and max_id the SQL queries for both tables
     executed_historic_id_query = execute_sql_query(db_con, historic_id_query, logger)
