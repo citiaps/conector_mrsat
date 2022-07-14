@@ -122,7 +122,9 @@ def open_sql_query(sql_file, config_data, config_table, logger):
     schema = config_data['sernapesca']['schema']
 
     with open("./sql_queries/" + sql_file, encoding = "utf8") as file:
-        sql_query = text(file.read().format(schema, table))
+        # Formats the query based on the parameters 
+        formatted_file = file.read().format(schema, table)
+        sql_query = text(formatted_file)
     print("[OK] - SQL file successfully opened")
     logger.debug("[OK] - OPEN_SQL_QUERY")
     return sql_query
@@ -198,14 +200,19 @@ def dict_to_df(response_dict, logger):
     Returns:
         pandas.core.frame.DataFrame
     """
-    if response_dict['Totregistros'] > 0:    
-        df = pd.DataFrame(response_dict["Sdtsnp"]["SDTSNP.SDTSNPItem"]).sort_values('FechaExtraccion', ascending=False)
-        print("[OK] - Python dictionary successfully transformed to pandas DataFrame")
+    
+    # Total records queried to the Web Service
+    total_records = response_dict['Totregistros']
+    
+    if total_records > 0:    
+        response = response_dict["Sdtsnp"]["SDTSNP.SDTSNPItem"]
+        df = pd.DataFrame(response).sort_values('FechaExtraccion', ascending=False)
+        print("[OK] - Python dictionary successfully transformed to pandas DataFrame. " + str(total_records) + " total records.")
         logger.debug("[OK] - DICT_TO_DF")
         return df
 
     else:
-        print("[WARNING] - There are no records for the days consulted")
+        print("[WARNING] - There are no records for the consulted days")
         logger.debug("[WARNING] - DICT_TO_DF")
         sys.exit(2)
 

@@ -108,9 +108,14 @@ def dict_to_df(response_dict, logger):
     Returns:
         pandas.core.frame.DataFrame
     """
-    if response_dict['Totregistros'] > 0:
-        df = pd.DataFrame(response_dict["Sdtsnp"]["SDTSNP.SDTSNPItem"]).sort_values('FechaExtraccion', ascending=False)
-        print("[OK] - Python dictionary successfully transformed to pandas DataFrame")
+    
+    # Total records queried to the Web Service
+    total_records = response_dict['Totregistros']
+    
+    if total_records > 0:
+        response = response_dict["Sdtsnp"]["SDTSNP.SDTSNPItem"]
+        df = pd.DataFrame(response).sort_values('FechaExtraccion', ascending=False)
+        print("[OK] - Python dictionary successfully transformed to pandas DataFrame. " + str(total_records) + " total records.")
         logger.debug("[OK] - DICT_TO_DF")
         return df
 
@@ -317,7 +322,8 @@ def open_sql_query(sql_file, config_data, logger):
     table = config_data['sernapesca']['historic_table']
 
     with open("./sql_queries/" + sql_file, encoding = "utf8") as file:
-        sql_query = text(file.read().format(schema, table))
+        formatted_file = file.read().format(schema, table)
+        sql_query = text(formatted_file)
     print("[OK] - SQL file successfully opened")
     logger.debug("[OK] - OPEN_SQL_QUERY")
     return sql_query
@@ -478,6 +484,7 @@ def main(argv):
     # Get the mrsat_hist missing dates
     missing_days = get_missing_days(max_date, logger)
 
+    # Check if there are missing days 
     if missing_days == -1:
         logger.debug("[WARNING] - Historic table already up to date")
         sys.exit("[WARNING] - Historic table already up to date")
