@@ -139,7 +139,7 @@ def response_to_dict(ws_response, logger):
     return response_dict
 
 def get_ws_response(config_data, client, missing_days, logger):
-    """Gets the past 60 days toxicologic records from the mrSAT WebService as a zeep response object.
+    """Gets the missing toxicologic records from the mrSAT WebService as a zeep response object.
 
     Args:
         config_data (dict): config.json parameters.
@@ -308,25 +308,33 @@ def generate_connection(db_engine, logger):
         logger.error('[ERROR] - GENERATE_CONNECTION')
         sys.exit(2)
 
-def open_sql_query(sql_file, config_data, logger):
+def open_sql_query(sql_file, config_data, config_table, logger):
     """Opens the given SQL file.
     
     Args:
         sql_file (str): Name of the .sql file that contains the query.
         config_data (dict): config.json parameters.
+        config_table (str): Name of the table to query.
     
     Returns:
         sqlalchemy.sql.elements.TextClause
     """
-    schema = config_data['sernapesca']['schema']
-    table = config_data['sernapesca']['historic_table']
+    try:
+        schema = config_data['sernapesca']['schema']
+        table = config_data['sernapesca'][config_table]
 
-    with open("./sql_queries/" + sql_file, encoding = "utf8") as file:
-        formatted_file = file.read().format(schema, table)
-        sql_query = text(formatted_file)
-    print("[OK] - SQL file successfully opened")
-    logger.debug("[OK] - OPEN_SQL_QUERY")
-    return sql_query
+        with open("./sql_queries/" + sql_file, encoding = "utf8") as file:
+            formatted_file = file.read().format(schema, table)
+            sql_query = text(formatted_file)
+        print("[OK] - SQL file successfully opened")
+        logger.debug("[OK] - OPEN_SQL_QUERY")
+        return sql_query
+
+    except Exception as e:
+        print("[ERROR] - Opening SQL file")
+        print(e)
+        logger.error('[ERROR] - OPEN_SQL_QUERY')
+        sys.exit(2)
 
 def create_db_engine(db_connection, logger):
     """Creates a sqlalchemy database engine based on the database connection string.
@@ -408,7 +416,7 @@ def create_log_file(log_path):
     if not os.path.exists(log_path):
         os.makedirs(log_path)
 
-    log_file = log_path + "/update_mrsat_hist.log"
+    log_file = log_path + "/update_mrsat_tables.log"
     return log_file 
 
 def get_config(filepath=""):
@@ -466,28 +474,43 @@ def main(argv):
     # Create sqlalchemy engine based on database parameters
     db_engine = create_db_engine(db_connection, logger)
     
-    # Open requeried SQL queries 
-    id_query = open_sql_query("get_max_id.sql", config_data, logger)
-    date_query = open_sql_query("get_max_date.sql", config_data, logger)
+    # Open the requeried SQL queries 
+    historic_check_delete = open_sql_query("delete_for_check.sql", config_data, "historic_table", logger)
+    recent_check_delete = open_sql_query("delete_for_check.sql", config_data, "last_days_table", logger)
+    historic_id_query = open_sql_query("get_max_id.sql", config_data, "historic_table", logger)
+    recent_id_query = open_sql_query("get_max_id.sql", config_data, "last_days_table", logger)
+    historic_date_query = open_sql_query("get_max_date.sql", config_data, "historic_table", logger)
+    recent_date_query = open_sql_query("get_max_date.sql", config_data, "last_days_table", logger)
 
     # Generate database connection
     db_con = generate_connection(db_engine, logger)
     
-    # Execute the SQL queries
-    executed_id_query = execute_sql_query(db_con, id_query, logger)
-    executed_date_query = execute_sql_query(db_con, date_query, logger)
+    # Delete the recent records from both tables, to enssurance that the table contents good records.
+    execute_sql_query(db_con, historic_check_delete, logger)
+    execute_sql_query(db_con, recent_check_delete, logger)
+    
+    # Execute max_date and max_id the SQL queries for both tables
+    executed_historic_id_query = execute_sql_query(db_con, historic_id_query, logger)
+    executed_recent_id_query = execute_sql_query(db_con, recent_id_query, logger)
 
-    # Get the maximum ID and Date
-    max_id = get_max_id(executed_id_query, logger)
-    max_date = get_max_date(executed_date_query, logger)
+    executed_historic_date_query = execute_sql_query(db_con, historic_date_query, logger)
+    executed_recent_date_query = execute_sql_query(db_con, recent_date_query, logger)
 
-    # Get the mrsat_hist missing dates
-    missing_days = get_missing_days(max_date, logger)
+    # Get the maximum ID and Date for both tables
+    historic_max_id = get_max_id(executed_historic_id_query, logger)
+    recent_max_id = get_max_id(executed_recent_id_query, logger)
+
+    historic_max_date = get_max_date(executed_historic_date_query, logger)
+    recent_max_date = get_max_date(executed_recent_date_query, logger)
+
+    # Get the missing dates from both tables
+    historic_missing_days = get_missing_days(historic_max_date, logger)
+    recent_missing_days = get_missing_days(recent_max_date, logger)
 
     # Check if there are missing days 
-    if missing_days == -1:
-        logger.debug("[WARNING] - Historic table already up to date")
-        sys.exit("[WARNING] - Historic table already up to date")
+    # if missing_days == -1:
+    #     logger.debug("[WARNING] - Historic table already up to date")
+    #     sys.exit("[WARNING] - Historic table already up to date")
 
     # Get the web service URL
     ws_url = generate_ws_url_string(config_data, logger)
@@ -504,29 +527,37 @@ def main(argv):
     # Create the webservice's consumer client
     client = create_client(ws_url, session, settings, logger)
 
-    # Get the WebService response
-    ws_response = get_ws_response(config_data, client, missing_days, logger)
+    # Get the WebService response from both tables
+    historic_ws_response = get_ws_response(config_data, client, historic_missing_days, logger)
+    recent_ws_response = get_ws_response(config_data, client, recent_missing_days, logger)
 
-    # Transform the WebService response into a Python dictionary
-    response_dict = response_to_dict(ws_response, logger)
+    # Transform the WebService responses into a Python dictionary
+    historic_response_dict = response_to_dict(historic_ws_response, logger)
+    recent_response_dict = response_to_dict(recent_ws_response, logger)
 
     # Transform python dict into Pandas DataFrame
-    df = dict_to_df(response_dict, logger)
+    historic_df = dict_to_df(historic_response_dict, logger)
+    recent_df = dict_to_df(recent_response_dict, logger)
 
     # Get the number of rows of the DataFrame
-    n_rows_ws = get_df_n_rows(df, logger)
+    historic_n_rows = get_df_n_rows(historic_df, logger)
+    recent_n_rows = get_df_n_rows(recent_df, logger)
     
     # Create column with the ID's
-    id_column = create_id_column(max_id, n_rows_ws, logger)
+    historic_id_column = create_id_column(historic_max_id, historic_n_rows, logger)
+    recent_id_column = create_id_column(recent_max_id, recent_n_rows, logger)
 
     # Insert the ID column into the DataFrame
-    df = insert_id_column(df, id_column, logger)
+    historic_df = insert_id_column(historic_df, historic_id_column, logger)
+    recent_df = insert_id_column(recent_df, recent_id_column, logger)
     
     # Create column of dates  
-    df = create_date_column(df, logger)
+    historic_df = create_date_column(historic_df, logger)
+    recent_df = create_date_column(recent_df, logger)
 
-    # Append the missing records to the database historic table
-    append_missing_records(df, config_data, db_engine, logger)
+    # Append the missing records to the database tables
+    append_missing_records(historic_df, config_data, db_engine, logger)
+    append_missing_records(recent_df, config_data, db_engine, logger)
 
     end = datetime.now()
 

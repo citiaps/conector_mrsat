@@ -12,7 +12,7 @@ from sqlalchemy import create_engine, text
 from datetime import date, datetime
 
 def append_new_records(df, config_data, db_engine, n_days, table, logger):
-    """Append the records from the past 2 days to the database table with toxicologic data.
+    """Append the records from the past 2 days to the database tables.
 
     Args:
         df (pandas.core.frame.DataFrame): Dataframe with the new records.
@@ -35,10 +35,6 @@ def append_new_records(df, config_data, db_engine, n_days, table, logger):
         if n_days == 2:
             print("[OK] - new records successfully appended to " + config_data['sernapesca'][table] + " table")
         
-        # Case if the table doesn't exists
-        else:
-            print("[OK] - " + config_data['sernapesca'][table] + " table successfully created")
-        
         logger.debug("[OK] - APPEND_NEW_RECORDS")
 
     except Exception as e:
@@ -46,7 +42,6 @@ def append_new_records(df, config_data, db_engine, n_days, table, logger):
         print("[ERROR] - Appending the new records to the existing table")
         logger.error('[ERROR] - APPEND_NEW_RECORDS')
         sys.exit(2)
-
 
 def create_date_column(df, logger):
     """Inserts column with the current datetime to the WS DataFrame.
@@ -118,16 +113,23 @@ def open_sql_query(sql_file, config_data, config_table, logger):
     Returns:
         sqlalchemy.sql.elements.TextClause
     """
-    table = config_data['sernapesca'][config_table]
-    schema = config_data['sernapesca']['schema']
+    try:
+        table = config_data['sernapesca'][config_table]
+        schema = config_data['sernapesca']['schema']
 
-    with open("./sql_queries/" + sql_file, encoding = "utf8") as file:
-        # Formats the query based on the parameters 
-        formatted_file = file.read().format(schema, table)
-        sql_query = text(formatted_file)
-    print("[OK] - SQL file successfully opened")
-    logger.debug("[OK] - OPEN_SQL_QUERY")
-    return sql_query
+        with open("./sql_queries/" + sql_file, encoding = "utf8") as file:
+            # Formats the query based on the parameters 
+            formatted_file = file.read().format(schema, table)
+            sql_query = text(formatted_file)
+        print("[OK] - SQL file successfully opened")
+        logger.debug("[OK] - OPEN_SQL_QUERY")
+        return sql_query
+
+    except Exception as e:
+        print("[ERROR] - Opening SQL file")
+        print(e)
+        logger.error('[ERROR] - OPEN_SQL_QUERY')
+        sys.exit(2)
 
 
 def insert_id_column(df, id_column, logger):
@@ -250,7 +252,7 @@ def get_ws_response(config_data, client, n_days, logger):
     return ws_reponse
 
 def check_if_table_exists(db_engine, config_data, logger):
-    """Check if the recent records table exists on the database. This determines the number of days to query to the WS. 
+    """Check if the recent records table exists on the database. If exists, return number of days to query, else, exit the code. 
 
     Args:
         db_engine (sqlalchemy.engine.base.Engine): Database sqlalchemy engine.
@@ -262,11 +264,15 @@ def check_if_table_exists(db_engine, config_data, logger):
     table = config_data['sernapesca']['last_days_table']
     schema = config_data['sernapesca']['schema']
     
-    if inspect(db_engine).has_table(table, schema):
+    table_check = inspect(db_engine).has_table(table, schema)
+    
+    if table_check:
         n_days = 2
 
     else:
-        n_days = 61
+        print("[OK] - Recent records table doesn't exists. Check the installation manual to proceed")
+        logger.error("[ERROR] - CHECK_IF_TABLE_EXISTS - RECENT RECORDS TABLE DOESN'T EXISTS")
+        sys.exit(2)
 
     print("[OK] - Recent records table successfully checked")
     logger.debug("[OK] - CHECK_IF_TABLE_EXISTS")
@@ -493,27 +499,6 @@ def main(argv):
     # Sets the number of days to query based on the existence of the recent records table
     n_days = check_if_table_exists(db_engine, config_data, logger)
 
-    # Creates the table if not exists
-    if n_days == 61:
-
-        # Gets the WebService response from the past months
-        ws_response = get_ws_response(config_data, client, n_days, logger)
-
-        # Transforms the WebService response into a Python dictionary
-        response_dict = response_to_dict(ws_response, logger)
-
-        # Transforms python dict into Pandas DataFrame
-        df = dict_to_df(response_dict, logger)
-
-        # Creates a date column
-        df = create_date_column(df, logger)
-
-        # Create the table on the database
-        append_new_records(df, config_data, db_engine, n_days, 'last_days_table', logger)
-
-        # Now the recent records table exists, sets the number of days to 3
-        n_days = 2
-
     # Gets the WebService response
     ws_response = get_ws_response(config_data, client, n_days, logger)
 
@@ -521,49 +506,55 @@ def main(argv):
     response_dict = response_to_dict(ws_response, logger)
 
     # Transforms python dict into Pandas DataFrame
-    df = dict_to_df(response_dict, logger)
+    recent_df = dict_to_df(response_dict, logger)
+    historic_df = dict_to_df(response_dict, logger)
 
     # Creates date column
-    df = create_date_column(df, logger)
+    recent_df = create_date_column(recent_df, logger)
+    historic_df = create_date_column(historic_df, logger)
 
     # Opens the SQL files
-    recent_records_query = open_sql_query("delete_recent_records.sql", config_data, 'last_days_table', logger)
-    historic_records_query = open_sql_query("delete_recent_records.sql", config_data, 'historic_table', logger)
-    oldest_records_query = open_sql_query("delete_old_records.sql", config_data, 'last_days_table', logger)
+    delete_recent_60days = open_sql_query("delete_recent_records.sql", config_data, 'last_days_table', logger)
+    delete_recent_historic= open_sql_query("delete_recent_records.sql", config_data, 'historic_table', logger)
+    delete_oldest_60days = open_sql_query("delete_old_records.sql", config_data, 'last_days_table', logger)
 
     # Generates database connection
     db_con = generate_connection(db_engine, logger)
 
     # Deletes the past 2 days records from the database tables
-    execute_sql_query(db_con, recent_records_query, logger)
-    execute_sql_query(db_con, historic_records_query, logger)
+    execute_sql_query(db_con, delete_recent_60days, logger)
+    execute_sql_query(db_con, delete_recent_historic, logger)
 
-    # Appends the new records extracted from the WebService ONLY to the recent records table
-    append_new_records(df, config_data, db_engine, n_days, 'last_days_table', logger)
-
-    # Delete the oldest records
-    execute_sql_query(db_con, oldest_records_query, logger)
-
-    # Opens the 'get_max_id.sql' file
-    id_query = open_sql_query("get_max_id.sql", config_data, 'historic_table', logger)
+    # Opens the 'get_max_id.sql' file for historic and recent table 
+    historic_id_query = open_sql_query("get_max_id.sql", config_data, 'historic_table', logger)
+    recent_id_query = open_sql_query("get_max_id.sql", config_data, 'last_days_table', logger)
 
     # Execute the SQL query
-    executed_id_query = execute_sql_query(db_con, id_query, logger)
+    executed_historic_id_query = execute_sql_query(db_con, historic_id_query, logger)
+    executed_recent_id_query = execute_sql_query(db_con, recent_id_query, logger)
 
     # Gets the maximum ID from the database table
-    max_id = get_max_id(executed_id_query, logger)
+    historic_max_id = get_max_id(executed_historic_id_query, logger)
+    recent_max_id = get_max_id(executed_recent_id_query, logger)
 
-    # Get the number of rows of the DataFrame
-    n_rows_ws = get_df_n_rows(df, logger)
-    
-    # Create column with the ID's
-    id_column = create_id_column(max_id, n_rows_ws, logger)
+    # Get the number of rows of the queried WS pandas DataFrame
+    historic_n_rows = get_df_n_rows(historic_df, logger)
+    recent_n_rows = get_df_n_rows(recent_df, logger)
 
-    # Insert the ID column into the DataFrame
-    df = insert_id_column(df, id_column, logger)
+    # Create columns with the ID's
+    historic_id_column = create_id_column(historic_max_id, historic_n_rows, logger)
+    recent_id_column = create_id_column(recent_max_id, recent_n_rows, logger)
 
-    # Appends the new records extracted from the WebService ONLY to the historic records table
-    append_new_records(df, config_data, db_engine, n_days, 'historic_table', logger)
+    # Insert the ID column into the DataFrames
+    historic_df = insert_id_column(historic_df, historic_id_column, logger)
+    recent_df = insert_id_column(recent_df, recent_id_column, logger)
+
+    # Appends the new records extracted from the WebService to the DB tables
+    append_new_records(historic_df, config_data, db_engine, n_days, 'historic_table', logger)
+    append_new_records(recent_df, config_data, db_engine, n_days, 'last_days_table', logger)
+
+    # Delete the oldest records on the last_days_table
+    execute_sql_query(db_con, delete_oldest_60days, logger)
 
     end = datetime.now()
 
