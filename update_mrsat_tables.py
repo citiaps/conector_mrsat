@@ -12,7 +12,7 @@ from sqlalchemy import create_engine, text
 from datetime import date, datetime
 
 
-def append_missing_records(df, config_data, db_engine, logger):
+def append_missing_records(df, config_data, db_engine, config_table, logger):
     """Append the missing records to the mrsat historic table.
 
     Args:
@@ -24,7 +24,7 @@ def append_missing_records(df, config_data, db_engine, logger):
         SAWarning: Did not recognize type 'geometry' of column 'geom'
     """
     try:
-        df.to_sql(config_data['sernapesca']['historic_table'], 
+        df.to_sql(config_data['sernapesca'][config_table], 
                     db_engine, 
                     if_exists = 'append', 
                     schema = config_data['sernapesca']['schema'], 
@@ -556,8 +556,8 @@ def main(argv):
     recent_df = create_date_column(recent_df, logger)
 
     # Append the missing records to the database tables
-    append_missing_records(historic_df, config_data, db_engine, logger)
-    append_missing_records(recent_df, config_data, db_engine, logger)
+    append_missing_records(historic_df, config_data, db_engine, "historic_table", logger)
+    append_missing_records(recent_df, config_data, db_engine, "last_days_table", logger)
 
     end = datetime.now()
 
