@@ -574,7 +574,7 @@ def main(argv):
 
     print(historic_df)
 
-    db_connection.close()
+    db_con.close()
     
     # Append the missing records to the database tables
     append_missing_records(historic_df, config_data, db_engine, "historic_table", logger)
