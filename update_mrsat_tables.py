@@ -301,7 +301,7 @@ def generate_connection(db_engine, logger):
         sqlalchemy.engine.base.Connection
     """
     try:
-        db_con = db_engine.connect().execution_options(autocommit=True)
+        db_con = db_engine.connect().execution_options(autocommit=False)
         print("[OK] - Successfully connected to the database engine")
         logger.debug("[OK] - GENERATE_CONNECTION")
         return db_con
@@ -574,6 +574,8 @@ def main(argv):
 
     print(historic_df)
 
+    db_connection.close()
+    
     # Append the missing records to the database tables
     append_missing_records(historic_df, config_data, db_engine, "historic_table", logger)
     print("-------------")
