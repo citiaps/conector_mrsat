@@ -21,8 +21,6 @@ def append_missing_records(df, config_data, db_engine, config_table, logger):
         db_engine (sqlalchemy.engine.base.Engine): Database sqlalchemy engine.
         config_table (str): Name of the table to use on the query, based on the config.json table name.
         
-    Raises:
-        SAWarning: Did not recognize type 'geometry' of column 'geom'
     """
     table = config_data['sernapesca'][config_table]
     schema = config_data['sernapesca']['schema']
@@ -407,7 +405,7 @@ def create_logger(log_file):
                     filemode='a')
 
     logger = logging.getLogger('requests')
-    logger.setLevel(logging.WARNING)
+    logger.setLevel(logging.DEBUG)
     return logger
 
 def create_log_file(log_path):
@@ -495,8 +493,6 @@ def main(argv):
     execute_sql_query(db_con, historic_check_delete, logger)
     execute_sql_query(db_con, recent_check_delete, logger)
     
-    sys.exit(2)
-
     # Execute max_date and max_id the SQL queries for both tables
     executed_historic_id_query = execute_sql_query(db_con, historic_id_query, logger)
     executed_recent_id_query = execute_sql_query(db_con, recent_id_query, logger)
