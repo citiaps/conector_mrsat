@@ -507,6 +507,9 @@ def main(argv):
     historic_max_date = get_max_date(executed_historic_date_query, logger)
     recent_max_date = get_max_date(executed_recent_date_query, logger)
 
+    print(historic_max_date)
+    print(historic_max_id)
+
     # Get the missing dates from both tables
     historic_missing_days = get_missing_days(historic_max_date, logger)
     recent_missing_days = get_missing_days(recent_max_date, logger)
@@ -543,24 +546,36 @@ def main(argv):
     historic_df = dict_to_df(historic_response_dict, logger)
     recent_df = dict_to_df(recent_response_dict, logger)
 
+    print(historic_df)
+
+
     # Get the number of rows of the DataFrame
     historic_n_rows = get_df_n_rows(historic_df, logger)
     recent_n_rows = get_df_n_rows(recent_df, logger)
     
+    print(historic_n_rows)
+
     # Create column with the ID's
     historic_id_column = create_id_column(historic_max_id, historic_n_rows, logger)
     recent_id_column = create_id_column(recent_max_id, recent_n_rows, logger)
+
+    print(historic_id_column)
 
     # Insert the ID column into the DataFrame
     historic_df = insert_id_column(historic_df, historic_id_column, logger)
     recent_df = insert_id_column(recent_df, recent_id_column, logger)
     
+    print(historic_df)
+
     # Create column of dates  
     historic_df = create_date_column(historic_df, logger)
     recent_df = create_date_column(recent_df, logger)
 
+    print(historic_df)
+
     # Append the missing records to the database tables
     append_missing_records(historic_df, config_data, db_engine, "historic_table", logger)
+    print("-------------")
     append_missing_records(recent_df, config_data, db_engine, "last_days_table", logger)
 
     end = datetime.now()
