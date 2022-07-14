@@ -9,6 +9,7 @@ from requests import Session
 from requests.auth import HTTPBasicAuth
 from sqlalchemy import inspect
 from sqlalchemy import create_engine, text
+from sqlalchemy.pool import NullPool
 from datetime import date, datetime
 
 
@@ -355,7 +356,7 @@ def create_db_engine(db_connection, logger):
                 "Echo": "True",
                 "MARS_Connection": "yes"
 	}
-        db_engine = create_engine(db_connection, connect_args=conn_args)
+        db_engine = create_engine(db_connection, connect_args=conn_args, poolclass=NullPool)
         print("[OK] - SQLAlchemy engine succesfully generated")
         logger.debug("[OK] - CREATE_DB_ENGINE")
         return db_engine
@@ -544,39 +545,39 @@ def main(argv):
 
     # Transform python dict into Pandas DataFrame
     historic_df = dict_to_df(historic_response_dict, logger)
-    #recent_df = dict_to_df(recent_response_dict, logger)
+    recent_df = dict_to_df(recent_response_dict, logger)
 
     print(historic_df)
 
 
     # Get the number of rows of the DataFrame
     historic_n_rows = get_df_n_rows(historic_df, logger)
-    #recent_n_rows = get_df_n_rows(recent_df, logger)
+    recent_n_rows = get_df_n_rows(recent_df, logger)
     
     print(historic_n_rows)
 
     # Create column with the ID's
     historic_id_column = create_id_column(historic_max_id, historic_n_rows, logger)
-    #recent_id_column = create_id_column(recent_max_id, recent_n_rows, logger)
+    recent_id_column = create_id_column(recent_max_id, recent_n_rows, logger)
 
     print(historic_id_column)
 
     # Insert the ID column into the DataFrame
     historic_df = insert_id_column(historic_df, historic_id_column, logger)
-    #recent_df = insert_id_column(recent_df, recent_id_column, logger)
+    recent_df = insert_id_column(recent_df, recent_id_column, logger)
     
     print(historic_df)
 
     # Create column of dates  
     historic_df = create_date_column(historic_df, logger)
-    #recent_df = create_date_column(recent_df, logger)
+    recent_df = create_date_column(recent_df, logger)
 
     print(historic_df)
 
     # Append the missing records to the database tables
     append_missing_records(historic_df, config_data, db_engine, "historic_table", logger)
     print("-------------")
-    #append_missing_records(recent_df, config_data, db_engine, "last_days_table", logger)
+    append_missing_records(recent_df, config_data, db_engine, "last_days_table", logger)
 
     end = datetime.now()
 
