@@ -84,7 +84,7 @@ def create_id_column(max_id, n_rows_ws, logger):
         list
     """
 
-    id_column = list(range(max_id, max_id + n_rows_ws))
+    id_column = list(range(max_id, max_id + n_rows_ws)).reverse()
     print("[OK] - ID columns successfully created")
     logger.debug("[OK] - CREATE_ID_COLUMN")
     return id_column
