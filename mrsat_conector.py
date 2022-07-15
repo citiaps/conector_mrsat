@@ -427,6 +427,19 @@ def create_logger(log_file):
     logger.setLevel(logging.DEBUG)
     return logger
 
+def delete_log_file(log_file):
+    """Deletes the log file if it's too big.
+
+    Args:
+        log_file (str): Path of the log file.
+    """    
+    log_size = os.path.getsize(log_file)
+    print(log_size)
+    
+    if log_size> 0:
+        if log_size < 20 * 1024:
+            os.remove(log_file)
+
 def create_log_file(log_path):
     """Creates the log folder if not exists. Get the log file name.
 
@@ -488,6 +501,11 @@ def main(argv):
 
     # Create the log file if not exists
     log_file = create_log_file(config_data["log_path"])
+
+    # Deletes the previous log file if too big
+    delete_log_file(log_file)
+
+    sys.exit(2)
 
     # Creates the logger
     logger = create_logger(log_file)
@@ -585,6 +603,8 @@ def main(argv):
     # Commit the APPEND to make changes on the DB
     trans.commit()
 
+    logger.info('--------------------------------------------------------')
+    
     end = datetime.now()
 
     print(f"[OK] - Script successfully executed. Time elapsed: {end - start}")

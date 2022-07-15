@@ -576,6 +576,8 @@ def main(argv):
     append_missing_records(historic_df, config_data, db_engine, "historic_table", logger)
     append_missing_records(recent_df, config_data, db_engine, "last_days_table", logger)
 
+    logger.info('--------------------------------------------------------')
+
     end = datetime.now()
 
     print(f"[OK] - Script successfully executed. Time elapsed: {end - start}")
