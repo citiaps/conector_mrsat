@@ -302,7 +302,7 @@ def generate_connection(db_engine, logger):
         sqlalchemy.engine.base.Connection
     """
     try:
-        db_con = db_engine.connect().execution_options(autocommit=False)
+        db_con = db_engine.begin().execution_options(autocommit=False)
         print("[OK] - Successfully connected to the database engine")
         logger.debug("[OK] - GENERATE_CONNECTION")
         return db_con
@@ -495,18 +495,6 @@ def main(argv):
     execute_sql_query(db_con, historic_check_delete, logger)
     execute_sql_query(db_con, recent_check_delete, logger)
     
-    #----------
-    db_con.close()
-    db_engine.dispose()
-    
-    # Create sqlalchemy engine based on database parameters
-    db_engine = create_db_engine(db_connection, logger)
-    
-    # Generate database connection
-    db_con = generate_connection(db_engine, logger)
-    
-    #------------------------
-
     # Execute max_date and max_id the SQL queries for both tables
     executed_historic_id_query = execute_sql_query(db_con, historic_id_query, logger)
     executed_recent_id_query = execute_sql_query(db_con, recent_id_query, logger)
@@ -523,6 +511,8 @@ def main(argv):
 
     print(historic_max_date)
     print(historic_max_id)
+
+    sys.exit("TEST")
 
     # Get the missing dates from both tables
     historic_missing_days = get_missing_days(historic_max_date, logger)
