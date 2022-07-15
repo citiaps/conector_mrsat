@@ -85,6 +85,17 @@ def execute_sql_query(db_con, sql_query, logger):
         sys.exit(2)
 
 
+def begin_connection(db_con, logger):
+    """Begin a transaction to execute DELETE querys.
+
+    Args:
+        db_con(sqlalchemy.engine.base.Connection): Database connection.
+    """
+    trans = db_con.begin()
+    print("[OK] - Transaction commit generated")
+    logger.debug("[OK] - BEGIN_CONNECTION")
+    return trans
+
 def generate_connection(db_engine, logger):
     """Connects to the given sqlalchemy database engine.
     
@@ -164,6 +175,7 @@ def create_id_column(max_id, n_rows_ws, logger):
     """
 
     id_column = list(range(max_id, max_id + n_rows_ws))
+    id_column.reverse()
     print("[OK] - ID columns successfully created")
     logger.debug("[OK] - CREATE_ID_COLUMN")
     return id_column
@@ -212,7 +224,8 @@ def dict_to_df(response_dict, logger):
     
     if total_records > 0:    
         response = response_dict["Sdtsnp"]["SDTSNP.SDTSNPItem"]
-        df = pd.DataFrame(response).sort_values('FechaExtraccion', ascending=False)
+        df = pd.DataFrame(response)
+        df.sort_values('FechaExtraccion', ascending=False)
         print("[OK] - Python dictionary successfully transformed to pandas DataFrame. " + str(total_records) + " total records.")
         logger.debug("[OK] - DICT_TO_DF")
         return df
@@ -411,7 +424,7 @@ def create_logger(log_file):
                     filemode='a')
 
     logger = logging.getLogger('requests')
-    logger.setLevel(logging.WARNING)
+    logger.setLevel(logging.DEBUG)
     return logger
 
 def create_log_file(log_path):
@@ -525,9 +538,15 @@ def main(argv):
     # Generates database connection
     db_con = generate_connection(db_engine, logger)
 
+    # Begin transaction block
+    trans = begin_connection(db_con, logger)
+    
     # Deletes the past 2 days records from the database tables
     execute_sql_query(db_con, delete_recent_60days, logger)
     execute_sql_query(db_con, delete_recent_historic, logger)
+
+    # Commit the DELETE querys to make changes on the DB
+    trans.commit()
 
     # Opens the 'get_max_id.sql' file for historic and recent table 
     historic_id_query = open_sql_query("get_max_id.sql", config_data, 'historic_table', logger)
@@ -557,8 +576,11 @@ def main(argv):
     append_new_records(historic_df, config_data, db_engine, n_days, 'historic_table', logger)
     append_new_records(recent_df, config_data, db_engine, n_days, 'last_days_table', logger)
 
+    # Commit the APPEND to make changes on the DB
+    trans.commit()
+    
     # Delete the oldest records on the last_days_table
-    execute_sql_query(db_con, delete_oldest_60days, logger)
+    #execute_sql_query(db_con, delete_oldest_60days, logger)
 
     end = datetime.now()
 
