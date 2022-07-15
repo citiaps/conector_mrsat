@@ -495,6 +495,18 @@ def main(argv):
     execute_sql_query(db_con, historic_check_delete, logger)
     execute_sql_query(db_con, recent_check_delete, logger)
     
+    #----------
+    db_con.close()
+    db_engine.dispose()
+    
+    # Create sqlalchemy engine based on database parameters
+    db_engine = create_db_engine(db_connection, logger)
+    
+    # Generate database connection
+    #db_con = generate_connection(db_engine, logger)
+    
+    #------------------------
+
     # Execute max_date and max_id the SQL queries for both tables
     executed_historic_id_query = execute_sql_query(db_con, historic_id_query, logger)
     executed_recent_id_query = execute_sql_query(db_con, recent_id_query, logger)
