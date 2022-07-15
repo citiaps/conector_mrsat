@@ -120,7 +120,8 @@ def dict_to_df(response_dict, logger):
     
     if total_records > 0:
         response = response_dict["Sdtsnp"]["SDTSNP.SDTSNPItem"]
-        df = pd.DataFrame(response).sort_values('FechaExtraccion', ascending=False)
+        df = pd.DataFrame(response)
+        df.sort_values('FechaExtraccion', ascending=False)
         print("[OK] - Python dictionary successfully transformed to pandas DataFrame. " + str(total_records) + " total records.")
         logger.debug("[OK] - DICT_TO_DF")
         return df
