@@ -6,10 +6,7 @@ import pandas as pd
 from zeep import Client, Settings, helpers
 from zeep.transports import Transport
 from requests import Session
-from requests.auth import HTTPBasicAuth
-from sqlalchemy import inspect
 from sqlalchemy import create_engine, text
-from sqlalchemy.pool import NullPool
 from datetime import date, datetime
 
 
@@ -295,11 +292,16 @@ def execute_sql_query(db_con, sql_query, logger):
         sys.exit(2)
 
 def begin_connection(db_con, logger):
+    """Begin a transaction to execute DELETE querys.
+
+    Args:
+        db_con(sqlalchemy.engine.base.Connection): Database connection.
+    """
     trans = db_con.begin()
     print("Transaction commit generated")
     logger.debug("[OK] - BEGIN_CONNECTION")
     return trans
-
+    
 def generate_connection(db_engine, logger):
     """Connects to the given sqlalchemy database engine.
     
@@ -364,7 +366,7 @@ def create_db_engine(db_connection, logger):
                 "Echo": "True",
                 "MARS_Connection": "yes"
 	}
-        db_engine = create_engine(db_connection, connect_args=conn_args, poolclass=NullPool)
+        db_engine = create_engine(db_connection, connect_args=conn_args)
         print("[OK] - SQLAlchemy engine succesfully generated")
         logger.debug("[OK] - CREATE_DB_ENGINE")
         return db_engine
@@ -498,12 +500,14 @@ def main(argv):
     # Generate database connection
     db_con = generate_connection(db_engine, logger)
 
+    # Begin transaction block
     trans = begin_connection(db_con, logger)
     
     # Delete the recent records from both tables, to enssurance that the table contents good records.
     execute_sql_query(db_con, historic_check_delete, logger)
     execute_sql_query(db_con, recent_check_delete, logger)
     
+    # Commit the DELETE querys to make changes on the DB
     trans.commit()
 
     # Execute max_date and max_id the SQL queries for both tables
@@ -523,11 +527,6 @@ def main(argv):
     # Get the missing dates from both tables
     historic_missing_days = get_missing_days(historic_max_date, logger)
     recent_missing_days = get_missing_days(recent_max_date, logger)
-
-    # Check if there are missing days 
-    # if missing_days == -1:
-    #     logger.debug("[WARNING] - Historic table already up to date")
-    #     sys.exit("[WARNING] - Historic table already up to date")
 
     # Get the web service URL
     ws_url = generate_ws_url_string(config_data, logger)
