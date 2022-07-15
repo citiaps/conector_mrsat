@@ -423,8 +423,8 @@ def create_logger(log_file):
                     filemode='a')
 
     logger = logging.getLogger('requests').setLevel(logging.CRITICAL)
-    logging.getLogger("zeep").setLevel(logging.CRITICAL)
-    logging.setLevel(logging.DEBUG)
+    logger.getLogger("zeep").setLevel(logging.CRITICAL)
+    logger.setLevel(logging.DEBUG)
     return logger
 
 def create_log_file(log_path):
