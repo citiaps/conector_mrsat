@@ -424,7 +424,6 @@ def create_logger(log_file):
 
     logger = logging.getLogger('requests')
     logger.setLevel(logging.DEBUG)
-    logger.propagate = False
     return logger
 
 def create_log_file(log_path):
