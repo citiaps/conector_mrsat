@@ -292,6 +292,12 @@ def execute_sql_query(db_con, sql_query, logger):
         logger.error('[ERROR] - EXECUTE_SQL_QUERY')
         sys.exit(2)
 
+def begin_connection(db_con, logger):
+    trans = db_con.begin()
+    print("Transaction commit generated")
+    logger.debug("[OK] - BEGIN_CONNECTION")
+    return trans
+
 def generate_connection(db_engine, logger):
     """Connects to the given sqlalchemy database engine.
     
@@ -302,8 +308,7 @@ def generate_connection(db_engine, logger):
         sqlalchemy.engine.base.Connection
     """
     try:
-        db_con = db_engine.begin()
-        #db_con = db_engine.connect().execution_options(autocommit=False)
+        db_con = db_engine.connect().execution_options(autocommit=False)
         print("[OK] - Successfully connected to the database engine")
         logger.debug("[OK] - GENERATE_CONNECTION")
         return db_con
@@ -491,11 +496,15 @@ def main(argv):
 
     # Generate database connection
     db_con = generate_connection(db_engine, logger)
+
+    trans = db_con.begin(db_con, logger)
     
     # Delete the recent records from both tables, to enssurance that the table contents good records.
     execute_sql_query(db_con, historic_check_delete, logger)
     execute_sql_query(db_con, recent_check_delete, logger)
     
+    trans.commit()
+
     # Execute max_date and max_id the SQL queries for both tables
     executed_historic_id_query = execute_sql_query(db_con, historic_id_query, logger)
     executed_recent_id_query = execute_sql_query(db_con, recent_id_query, logger)
