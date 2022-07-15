@@ -265,7 +265,7 @@ def get_max_id(executed_query, logger):
         int
     """
     query = executed_query.fetchone()
-    max_id = query[0] + 2
+    max_id = query[0] + 1
     print("[OK] - Database table's maximum ID successfully obtained")
     logger.debug("[OK] - GET_MAX_ID")
     return max_id
@@ -521,8 +521,6 @@ def main(argv):
 
     print(historic_max_date)
     print(historic_max_id)
-
-    sys.exit("TEST")
 
     # Get the missing dates from both tables
     historic_missing_days = get_missing_days(historic_max_date, logger)
