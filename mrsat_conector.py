@@ -515,8 +515,12 @@ def main(argv):
     # Sets the number of days to query based on the existence of the recent records table
     n_days = check_if_table_exists(db_engine, config_data, logger)
 
+    logger.disabled = True
+    
     # Gets the WebService response
     ws_response = get_ws_response(config_data, client, n_days, logger)
+
+    logger.disabled = False
 
     # Transforms the WebService response into a Python dictionary
     response_dict = response_to_dict(ws_response, logger)
