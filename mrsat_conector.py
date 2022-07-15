@@ -520,10 +520,10 @@ def main(argv):
     # Gets the WebService response
     ws_response = get_ws_response(config_data, client, n_days, logger)
 
-    logger.disabled = False
-
     # Transforms the WebService response into a Python dictionary
     response_dict = response_to_dict(ws_response, logger)
+
+    logger.disabled = False
 
     # Transforms python dict into Pandas DataFrame
     recent_df = dict_to_df(response_dict, logger)
