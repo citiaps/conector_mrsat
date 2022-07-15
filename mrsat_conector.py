@@ -439,6 +439,7 @@ def delete_log_file(log_file):
     if log_size > 0:
         if log_size > 1000: #20 * 1024:
             os.remove(log_file)
+            print("[OK] - Log file removed")
 
 def create_log_file(log_path):
     """Creates the log folder if not exists. Get the log file name.
