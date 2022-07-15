@@ -303,6 +303,7 @@ def generate_connection(db_engine, logger):
     """
     try:
         db_con = db_engine.begin().execution_options(autocommit=False)
+        #db_con = db_engine.connect().execution_options(autocommit=False)
         print("[OK] - Successfully connected to the database engine")
         logger.debug("[OK] - GENERATE_CONNECTION")
         return db_con
