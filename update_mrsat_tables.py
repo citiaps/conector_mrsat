@@ -499,34 +499,34 @@ def main(argv):
     # Generate database connection
     db_con = generate_connection(db_engine, logger)
 
-    trans = begin_connection(db_con, logger)
+    # trans = begin_connection(db_con, logger)
     
-    # Delete the recent records from both tables, to enssurance that the table contents good records.
-    execute_sql_query(db_con, historic_check_delete, logger)
-    execute_sql_query(db_con, recent_check_delete, logger)
+    # # Delete the recent records from both tables, to enssurance that the table contents good records.
+    # execute_sql_query(db_con, historic_check_delete, logger)
+    # execute_sql_query(db_con, recent_check_delete, logger)
     
-    trans.commit()
+    # trans.commit()
 
     # Execute max_date and max_id the SQL queries for both tables
     executed_historic_id_query = execute_sql_query(db_con, historic_id_query, logger)
-    executed_recent_id_query = execute_sql_query(db_con, recent_id_query, logger)
+    #executed_recent_id_query = execute_sql_query(db_con, recent_id_query, logger)
 
     executed_historic_date_query = execute_sql_query(db_con, historic_date_query, logger)
-    executed_recent_date_query = execute_sql_query(db_con, recent_date_query, logger)
+    #executed_recent_date_query = execute_sql_query(db_con, recent_date_query, logger)
 
     # Get the maximum ID and Date for both tables
     historic_max_id = get_max_id(executed_historic_id_query, logger)
-    recent_max_id = get_max_id(executed_recent_id_query, logger)
+    #recent_max_id = get_max_id(executed_recent_id_query, logger)
 
     historic_max_date = get_max_date(executed_historic_date_query, logger)
-    recent_max_date = get_max_date(executed_recent_date_query, logger)
+    #recent_max_date = get_max_date(executed_recent_date_query, logger)
 
     print(historic_max_date)
     print(historic_max_id)
 
     # Get the missing dates from both tables
     historic_missing_days = get_missing_days(historic_max_date, logger)
-    recent_missing_days = get_missing_days(recent_max_date, logger)
+    #recent_missing_days = get_missing_days(recent_max_date, logger)
 
     # Check if there are missing days 
     # if missing_days == -1:
@@ -550,31 +550,31 @@ def main(argv):
 
     # Get the WebService response from both tables
     historic_ws_response = get_ws_response(config_data, client, historic_missing_days, logger)
-    recent_ws_response = get_ws_response(config_data, client, recent_missing_days, logger)
+    #recent_ws_response = get_ws_response(config_data, client, recent_missing_days, logger)
 
     # Transform the WebService responses into a Python dictionary
     historic_response_dict = response_to_dict(historic_ws_response, logger)
-    recent_response_dict = response_to_dict(recent_ws_response, logger)
+    #recent_response_dict = response_to_dict(recent_ws_response, logger)
 
     # Transform python dict into Pandas DataFrame
     historic_df = dict_to_df(historic_response_dict, logger)
-    recent_df = dict_to_df(recent_response_dict, logger)
+    #recent_df = dict_to_df(recent_response_dict, logger)
 
     # Get the number of rows of the DataFrame
     historic_n_rows = get_df_n_rows(historic_df, logger)
-    recent_n_rows = get_df_n_rows(recent_df, logger)
+    #recent_n_rows = get_df_n_rows(recent_df, logger)
 
     # Create column with the ID's
     historic_id_column = create_id_column(historic_max_id, historic_n_rows, logger)
-    recent_id_column = create_id_column(recent_max_id, recent_n_rows, logger)
+    #recent_id_column = create_id_column(recent_max_id, recent_n_rows, logger)
     
     # Insert the ID column into the DataFrame
     historic_df = insert_id_column(historic_df, historic_id_column, logger)
-    recent_df = insert_id_column(recent_df, recent_id_column, logger)
+    #recent_df = insert_id_column(recent_df, recent_id_column, logger)
 
     # Create column of dates  
     historic_df = create_date_column(historic_df, logger)
-    recent_df = create_date_column(recent_df, logger)
+    #recent_df = create_date_column(recent_df, logger)
     
     db_con.close()
     db_engine.dispose()
@@ -588,7 +588,7 @@ def main(argv):
 
     # Append the missing records to the database tables
     append_missing_records(historic_df, config_data, db_engine, "historic_table", logger)
-    append_missing_records(recent_df, config_data, db_engine, "last_days_table", logger)
+    append_missing_records(historic_df, config_data, db_engine, "last_days_table", logger)
 
     end = datetime.now()
 
