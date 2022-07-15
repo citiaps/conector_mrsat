@@ -6,7 +6,6 @@ import pandas as pd
 from zeep import Client, Settings, helpers
 from zeep.transports import Transport
 from requests import Session
-from requests.auth import HTTPBasicAuth
 from sqlalchemy import inspect
 from sqlalchemy import create_engine, text
 from datetime import date, datetime
@@ -576,11 +575,14 @@ def main(argv):
     append_new_records(historic_df, config_data, db_engine, n_days, 'historic_table', logger)
     append_new_records(recent_df, config_data, db_engine, n_days, 'last_days_table', logger)
 
-    # Commit the APPEND to make changes on the DB
-    trans.commit()
+    # Begin transaction block
+    trans = begin_connection(db_con, logger)
     
     # Delete the oldest records on the last_days_table
-    #execute_sql_query(db_con, delete_oldest_60days, logger)
+    execute_sql_query(db_con, delete_oldest_60days, logger)
+
+    # Commit the APPEND to make changes on the DB
+    trans.commit()
 
     end = datetime.now()
 
