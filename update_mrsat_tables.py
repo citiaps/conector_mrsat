@@ -503,7 +503,7 @@ def main(argv):
     db_engine = create_db_engine(db_connection, logger)
     
     # Generate database connection
-    #db_con = generate_connection(db_engine, logger)
+    db_con = generate_connection(db_engine, logger)
     
     #------------------------
 
