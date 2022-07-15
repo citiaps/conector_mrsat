@@ -422,8 +422,8 @@ def create_logger(log_file):
                     format='%(asctime)s %(message)s',
                     filemode='a')
 
-    logger = logging.getLogger('requests')
-    logger = logging.getLogger("zeep").setLevel(logging.CRITICAL)
+    logger = logging.getLogger('requests').setLevel(logging.CRITICAL)
+    logger.getLogger("zeep").setLevel(logging.CRITICAL)
     logger.setLevel(logging.DEBUG)
     return logger
 
