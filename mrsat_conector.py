@@ -106,7 +106,7 @@ def generate_connection(db_engine, logger):
         sqlalchemy.engine.base.Connection
     """
     try:
-        db_con = db_engine.connect().execution_options(autocommit=True)
+        db_con = db_engine.connect().execution_options(autocommit=False)
         print("[OK] - Successfully connected to the database engine")
         logger.debug("[OK] - GENERATE_CONNECTION")
         return db_con
