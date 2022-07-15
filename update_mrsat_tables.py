@@ -298,7 +298,7 @@ def begin_connection(db_con, logger):
         db_con(sqlalchemy.engine.base.Connection): Database connection.
     """
     trans = db_con.begin()
-    print("Transaction commit generated")
+    print("[OK] - Transaction commit generated")
     logger.debug("[OK] - BEGIN_CONNECTION")
     return trans
     
