@@ -566,6 +566,10 @@ def main(argv):
     historic_id_column = create_id_column(historic_max_id, historic_n_rows, logger)
     recent_id_column = create_id_column(recent_max_id, recent_n_rows, logger)
 
+    print(historic_id_column)
+    print(recent_id_column)
+    sys.exit(2)
+    
     # Insert the ID column into the DataFrame
     historic_df = insert_id_column(historic_df, historic_id_column, logger)
     recent_df = insert_id_column(recent_df, recent_id_column, logger)
