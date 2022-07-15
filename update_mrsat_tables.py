@@ -497,7 +497,7 @@ def main(argv):
     # Generate database connection
     db_con = generate_connection(db_engine, logger)
 
-    trans = db_con.begin(db_con, logger)
+    trans = begin_connection(db_con, logger)
     
     # Delete the recent records from both tables, to enssurance that the table contents good records.
     execute_sql_query(db_con, historic_check_delete, logger)
