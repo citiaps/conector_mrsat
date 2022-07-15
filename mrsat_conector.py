@@ -436,8 +436,8 @@ def delete_log_file(log_file):
     log_size = os.path.getsize(log_file)
     print(log_size)
     
-    if log_size> 0:
-        if log_size < 20 * 1024:
+    if log_size > 0:
+        if log_size > 1000: #20 * 1024:
             os.remove(log_file)
 
 def create_log_file(log_path):
@@ -504,8 +504,6 @@ def main(argv):
 
     # Deletes the previous log file if too big
     delete_log_file(log_file)
-
-    sys.exit(2)
 
     # Creates the logger
     logger = create_logger(log_file)
