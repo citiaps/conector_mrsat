@@ -440,7 +440,7 @@ def delete_log_file(log_file):
         print(log_size)
         
         if log_size > 0:
-            if log_size > 1000: #20 * 1024:
+            if log_size > 80 * 1024:
                 os.remove(log_file)
                 print("[OK] - Log file removed")
 
