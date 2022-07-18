@@ -226,12 +226,12 @@ def dict_to_df(response_dict, logger):
         df = pd.DataFrame(response)
         df.sort_values('FechaExtraccion', ascending=False)
         print("[OK] - Python dictionary successfully transformed to pandas DataFrame. " + str(total_records) + " total records.")
-        logger.debug("[OK] - DICT_TO_DF")
+        logger.debug("[OK] - DICT_TO_DF - " + str(total_records) + " new total records.")
         return df
 
     else:
         print("[WARNING] - There are no records for the consulted days")
-        logger.debug("[WARNING] - DICT_TO_DF")
+        logger.debug("[WARNING] - DICT_TO_DF - NO RECORD FOR QUERIED DAYS")
         sys.exit(2)
 
 def response_to_dict(ws_response, logger):
