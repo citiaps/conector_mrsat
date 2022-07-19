@@ -8,5 +8,5 @@ RESULTADOS ESPERADOS:
 */
 
 DELETE FROM {}.{}
-WHERE DATEDIFF(dd, "FechaExtraccion", GETDATE()) <= 3;
+WHERE DATEDIFF(dd, "FechaExtraccion", GETDATE()) <= 4;
 

@@ -35,7 +35,7 @@ def append_new_records(df, config_data, db_engine, n_days, config_table, logger)
                     index = False)
 
         # Case if the table previously exists
-        if n_days == 3:
+        if n_days == 4:
             print("[OK] - new records successfully appended to " + table + " table")
         
         logger.debug("[OK] - APPEND_NEW_RECORDS")
@@ -283,7 +283,7 @@ def check_if_table_exists(db_engine, config_data, logger):
     table_check = inspect(db_engine).has_table(table, schema)
     
     if table_check:
-        n_days = 3
+        n_days = 4
 
     else:
         print("[OK] - Recent records table doesn't exists. Check the installation manual to proceed")
